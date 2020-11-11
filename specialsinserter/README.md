@@ -114,9 +114,8 @@ poetry run python -m specialsinserter -h
 Usage help (invoke from this project's root) will display all options:
 
 ```bash
-# Naked call:
-# (Alternatively, use poetry)
-python -m specialsinserter -h
+# Naked call (alternatively, use poetry)
+poetry run python -m specialsinserter -h
 ```
 
 The tool can read from STDIN (outputting to STDOUT), or work with the clipboard (overwriting its contents with a corrected version).
@@ -125,27 +124,68 @@ This allows for example:
 ```bash
 $ cat test.txt
 Hoeflich fragen!
-$ cat test.txt | python -m specialsinserter de
+$ cat test.txt | poetry run python -m specialsinserter de
 Höflich fragen!
 # Reverse mode:
-$ cat test.txt | python -m specialsinserter de | python -m specialsinserter -r de
+$ cat test.txt | poetry run python -m specialsinserter de | poetry run python -m specialsinserter -r de
 Hoeflich fragen!
 ```
 
 or
 
 ```bash
-python -m specialsinserter -c de
+poetry run python -m specialsinserter -c de
 # Nothing happens: clipboard is read and written to
 # silently.
 ```
 
 After installing (see below) the package, these calls should work system-wide.
 
----
+### Run tests
 
-Install (also important for tests to run/import reliably) this package on your system, in *editable* (symlink) mode:
+The testing framework is installed as a development dependency.
+This allows us, after `poetry install`, to simply run:
 
 ```bash
-pip install -e .
+poetry run pytest
 ```
+
+## Installation
+
+You can install this project system-wide, using your system Python:
+
+```bash
+pip install --editable .
+```
+
+This relies on [setup.py](setup.py) (which `poetry` does not use).
+An editable install (symlink) mode allows you to modify the source without having to
+reinstall.
+
+Note that this approach is discouraged, since your system Python might conflict with
+the [requirements](pyproject.toml) of this project (hence, `poetry`).
+However, if you installed successfully and have all requirements in place, you can call
+this tool directly:
+
+```bash
+python -m specialsinserter -h
+```
+
+## AutoHotKey
+
+This tool can be integrated with [AutoHotKey](https://www.autohotkey.com/), allowing you
+to use it at the touch of a button.
+This can be used to setup a keyboard shortcut to run this tool in-place, quickly replacing
+what you need without leaving your text editing environment.
+
+I was unable to use `poetry` commands for this, getting
+
+> The system cannot find the file specified.
+
+It works with plain `python` invocations.
+Thanks to `SetWorkingDir`, we do *not* have to [install](#installation) the module
+system-wide.
+*However*, the requirements need to be installed and available to the plain `python`
+command.
+
+The AutoHotKey file is [here](specialsinserter.ahk).
