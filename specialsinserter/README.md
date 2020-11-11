@@ -189,3 +189,6 @@ system-wide.
 command.
 
 The AutoHotKey file is [here](specialsinserter.ahk).
+
+Follow [this guide](https://www.autohotkey.com/docs/FAQ.htm#Startup) to have the script
+launch on boot automatically.
