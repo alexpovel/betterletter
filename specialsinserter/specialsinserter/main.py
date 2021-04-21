@@ -15,6 +15,9 @@ import sys
 from functools import partial
 from itertools import combinations
 from pathlib import Path
+from shutil import which
+from subprocess import run
+from tempfile import mkstemp
 from typing import Any, Generator, Iterable, Union
 
 import pyperclip
@@ -23,6 +26,12 @@ import pyperclip
 # Provide this globally so no spot is forgotten.
 ENCODING = "utf8"
 OPEN_WITH_ENCODING = partial(open, encoding=ENCODING)
+
+GIT = which("git")
+if GIT is None:
+    logging.warning("git not available, won't output a diff.")
+else:
+    logging.info("Will use git for pretty diffing.")
 
 
 def distinct_highest_element(iterable: Iterable, key=None) -> Union[Any, None]:
@@ -567,6 +576,40 @@ def main():
             known_words=known_words,
             force=args["force_all"],
         )
+
+    if GIT is not None:
+        # `mkstemp` does *not* delete the file upon closing, which is what we need since
+        # we use it *after* the context manager exits. Deleting the file requires
+        # 'manual intervention', but we just wait for the OS to clean up `/tmp`,
+        # `%USERPROFILE%\AppData\Local\Temp` or wherever the file was put.
+        paths = []
+        for text in [before_text, after_text]:
+            _, path = mkstemp(text=True)
+            with open(path, "w") as f:
+                f.write(text)
+            paths.append(path)  # Quote against spaces etc.
+
+        assert len(paths) == 2
+
+        diff = run(
+            [
+                GIT,
+                "diff",
+                "--color",
+                "--word-diff",
+            ]
+            + paths,
+            capture_output=True,
+        ).stdout
+
+        try:
+            diff_output = diff.decode("utf-8")
+        except UnicodeDecodeError:
+            # Windows doing its thing again... the command output is possibly *not*
+            # unicode, despite setting `LC_ALL=C.UTF-8`
+            diff_output = diff.decode("latin-1")
+
+        sys.stderr.write(diff_output)  # Just analytics, do not interfere with stdout
 
     if use_clipboard:
         pyperclip.copy(after_text)
