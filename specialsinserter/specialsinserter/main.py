@@ -534,19 +534,21 @@ def main():
     use_clipboard = args["clipboard"]
 
     if use_clipboard:
-        text = pyperclip.paste()
-        backup_clipboard(text, file=this_dir / Path(".clip.bak"))
+        before_text = pyperclip.paste()
+        backup_clipboard(before_text, file=this_dir / Path(".clip.bak"))
         possible_empty_reason = "clipboard empty or binary (document, image, ...)"
     else:
-        text = sys.stdin.read()
+        before_text = sys.stdin.read()
         possible_empty_reason = "STDIN was empty"
 
-    if not text:
+    if not before_text:
         logging.debug(f"No text received, exiting ({possible_empty_reason}).")
         return
 
     if args["reverse"]:
-        new_text = substitute_specials_with_alts(text, language_specials[language])
+        after_text = substitute_specials_with_alts(
+            before_text, language_specials[language]
+        )
     else:
         try:
             known_words = prepare_processed_dictionary(
@@ -559,17 +561,17 @@ def main():
                 f"Dictionary for {language=} not available (looked for '{e.filename}')"
             ) from e
 
-        new_text = substitute_alts_with_specials(
-            text=text,
+        after_text = substitute_alts_with_specials(
+            text=before_text,
             specials_to_alt_spellings=language_specials[language],
             known_words=known_words,
             force=args["force_all"],
         )
 
     if use_clipboard:
-        pyperclip.copy(new_text)
+        pyperclip.copy(after_text)
     else:
-        print(new_text)
+        print(after_text)
 
 
 if __name__ == "__main__":
