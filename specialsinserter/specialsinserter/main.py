@@ -15,7 +15,7 @@ import sys
 from functools import partial
 from itertools import combinations
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Tuple
+from typing import Any, Generator, Iterable, Union
 
 import pyperclip
 
@@ -25,7 +25,7 @@ ENCODING = "utf8"
 OPEN_WITH_ENCODING = partial(open, encoding=ENCODING)
 
 
-def distinct_highest_element(iterable: Iterable, key=None) -> bool:
+def distinct_highest_element(iterable: Iterable, key=None) -> Union[Any, None]:
     """Gets one element if it compares greater than all others according to some key.
 
     For example, using `key=len`, the list `[(1, 2), (3, 4)]` has two tuples of the
@@ -64,25 +64,25 @@ def distinct_highest_element(iterable: Iterable, key=None) -> bool:
     else:
         if key(second_highest) < key(highest):
             return highest
-    # Fell through, implicit `return None`
+    return None  # Fell through, explicit return for mypy
 
 
-def read_linedelimited_file(file: Path) -> List[str]:
+def read_linedelimited_file(file: Path) -> list[str]:
     with OPEN_WITH_ENCODING(file) as f:
         lines = f.read().splitlines()
     logging.debug(f"Fetched list containing {len(lines)} items from {file}")
     return lines
 
 
-def write_linedelimited_file(file: Path, lines: List[str]):
+def write_linedelimited_file(file: Path, lines: list[str]):
     with OPEN_WITH_ENCODING(file, "w") as f:
         f.write("\n".join(lines))
     logging.debug(f"Wrote file containing {len(lines)} lines to {file}")
 
 
 def filter_strs_by_letter_occurrence(
-    strings: List[str], letter_filters: List[str]
-) -> List[str]:
+    strings: list[str], letter_filters: list[str]
+) -> Generator[str, None, None]:
     """Filters a string list by only retaining elements that contain any filter letters.
 
     Comparison for filtering is caseless.
@@ -102,8 +102,10 @@ def filter_strs_by_letter_occurrence(
 
 
 def prepare_processed_dictionary(
-    file: Path, fallback_file: Path, letter_filters: List[str] = None,
-) -> List[str]:
+    file: Path,
+    fallback_file: Path,
+    letter_filters: list[str] = None,
+) -> list[str]:
     """Provides words from a pre-processed file or additionally creates it if not found.
 
     Args:
@@ -177,8 +179,8 @@ def combinations_any_length(iterable: Iterable[Any]) -> Any:
 
 def substitute_spans(
     string: str,
-    spans: List[Tuple[int, int]],
-    spans_to_substitutions: Dict[Tuple[int, int], str],
+    spans: list[tuple[int, int]],
+    spans_to_substitutions: dict[tuple[int, int], str],
 ) -> str:
     """Substitutes elements at given positions in a string.
 
@@ -205,7 +207,7 @@ def substitute_spans(
     # be done on the entire string at once. There exists words for which this is not
     # suitable, e.g. 'Kuechenfeuer' -> 'Küchenfeuer': two 'ue', only one of which is
     # to be replaced.
-    chars = list(string)
+    chars = list(string)  # Make mutable
     for span in spans:
         start, end = span
         substitution = spans_to_substitutions[span]
@@ -219,7 +221,9 @@ def substitute_spans(
 
 
 def represent_strings(
-    strings: List[str], separator: str = "|", delimiters: Tuple[str, str] = ("[", "]"),
+    strings: list[str],
+    separator: str = "|",
+    delimiters: tuple[str, str] = ("[", "]"),
 ) -> str:
     """Represents strings as one by joining them, leaving single strings as-is.
 
@@ -241,19 +245,21 @@ def represent_strings(
         )
 
     multiple_strings = int(len(strings) > 1)
-    delimiters = tuple(delimiter * multiple_strings for delimiter in delimiters)
+    processed_delimiters = tuple(
+        delimiter * multiple_strings for delimiter in delimiters
+    )
 
     if len(strings) == 1:
         # These assertions resulted from what used to be a comment; it is a very wordy
         # and duplicated effort to assert correctness of the above trickery instead of
         # using a more straightforward approach. This is just for fun.
-        assert not any(delimiters)
+        assert not any(processed_delimiters)
         assert separator.join(strings) == strings[0]
 
-    return delimiters[0] + separator.join(strings) + delimiters[-1]
+    return processed_delimiters[0] + separator.join(strings) + processed_delimiters[-1]
 
 
-def parse(description: str, lang_choices: Iterable[str]) -> Dict[str, Any]:
+def parse(description: str, lang_choices: Iterable[str]) -> dict[str, Any]:
     """Prepares, runs and returns parsing of CLI arguments for the script."""
     parser = argparse.ArgumentParser(description=description)
 
@@ -293,7 +299,7 @@ def parse(description: str, lang_choices: Iterable[str]) -> Dict[str, Any]:
 
 def substitute_alts_with_specials(
     text: str,
-    specials_to_alt_spellings: Dict[str, str],
+    specials_to_alt_spellings: dict[str, str],
     known_words: Iterable[str],
     force: bool,
 ) -> str:
@@ -462,7 +468,8 @@ def substitute_alts_with_specials(
 
 
 def substitute_specials_with_alts(
-    text: str, specials_to_alt_spellings: Dict[str, str],
+    text: str,
+    specials_to_alt_spellings: dict[str, str],
 ):
     """Replaces all special characters in a text with their alternative spellings.
 
