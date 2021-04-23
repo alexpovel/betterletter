@@ -12,12 +12,11 @@ import json
 import logging
 import re
 import sys
+import tkinter as tk
+from difflib import Differ
 from functools import partial
 from itertools import combinations
 from pathlib import Path
-from shutil import which
-from subprocess import run
-from tempfile import mkstemp
 from typing import Any, Generator, Iterable, Union
 
 import pyperclip
@@ -26,12 +25,6 @@ import pyperclip
 # Provide this globally so no spot is forgotten.
 ENCODING = "utf8"
 OPEN_WITH_ENCODING = partial(open, encoding=ENCODING)
-
-GIT = which("git")
-if GIT is None:
-    logging.warning("git not available, won't output a diff.")
-else:
-    logging.info("Will use git for pretty diffing.")
 
 
 def distinct_highest_element(iterable: Iterable, key=None) -> Union[Any, None]:
@@ -294,7 +287,13 @@ def parse(description: str, lang_choices: Iterable[str]) -> dict[str, Any]:
         "-r",
         "--reverse",
         help="Reverse mode, where all special characters are simply replaced"
-        " by their alternative spellings",
+        " by their alternative spellings.",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-g",
+        "--gui-confirm",
+        help="Stop and open a GUI prompt for confirmation before finishing.",
         action="store_true",
     )
     parser.add_argument(
@@ -341,6 +340,11 @@ def substitute_alts_with_specials(
         special_character.lower(): re.compile(alt_spelling.casefold(), re.IGNORECASE)
         for special_character, alt_spelling in specials_to_alt_spellings.items()
     }
+
+    # A final, single newline won't survive the `splitlines` and `"\n".join` procedure
+    # otherwise:
+    newline = "\n"
+    ending = newline if text[-1] == newline else ""
 
     lines = text.splitlines()
     processed_lines = []
@@ -473,7 +477,7 @@ def substitute_alts_with_specials(
         new_line = "".join(processed_line)
         logging.debug(f"Processed line reads: '{new_line}'")
         processed_lines.append(new_line)
-    return "\n".join(processed_lines)
+    return "\n".join(processed_lines) + ending
 
 
 def substitute_specials_with_alts(
@@ -519,6 +523,17 @@ def backup_clipboard(text: str, file: Path):
     """Writes text content to file for backup purposes."""
     with OPEN_WITH_ENCODING(file, "w") as f:
         f.write(text)
+
+
+def splitlines(string: str) -> list[str]:
+    """Splits a newline-delimited string into a list of newline-delimited strings.
+
+    Suitable for `difflib.Differ.compare`.
+    """
+    lines = string.splitlines(keepends=False)
+    # `splitlines(keepends=True)` would work, but the last line is problematic. This
+    # manual approach is more reliable.
+    return [line + "\n" for line in lines]
 
 
 def main():
@@ -577,39 +592,41 @@ def main():
             force=args["force_all"],
         )
 
-    if GIT is not None:
-        # `mkstemp` does *not* delete the file upon closing, which is what we need since
-        # we use it *after* the context manager exits. Deleting the file requires
-        # 'manual intervention', but we just wait for the OS to clean up `/tmp`,
-        # `%USERPROFILE%\AppData\Local\Temp` or wherever the file was put.
-        paths = []
-        for text in [before_text, after_text]:
-            _, path = mkstemp(text=True)
-            with open(path, "w") as f:
-                f.write(text)
-            paths.append(path)  # Quote against spaces etc.
+    raw_diff = Differ().compare(splitlines(before_text), splitlines(after_text))
+    # See https://docs.python.org/3/library/difflib.html#difflib.Differ :
+    # a 'line common to both sequences' starts with two spaces -> we don't care
+    diff = "".join(line for line in raw_diff if line[:2] != "  ")
 
-        assert len(paths) == 2
+    if args["gui_confirm"]:
+        root = tk.Tk()
 
-        diff = run(
-            [
-                GIT,
-                "diff",
-                "--color",
-                "--word-diff",
-            ]
-            + paths,
-            capture_output=True,
-        ).stdout
+        usage = tk.Label(
+            text="ENTER to confirm, ESC to abort.",
+            font="TkFixedFont",
+            fg="white",
+            bg="SlateGray",
+        )
+        usage.pack()
 
-        try:
-            diff_output = diff.decode("utf-8")
-        except UnicodeDecodeError:
-            # Windows doing its thing again... the command output is possibly *not*
-            # unicode, despite setting `LC_ALL=C.UTF-8`
-            diff_output = diff.decode("latin-1")
+        difflabel = tk.Label(text=diff, font="TkFixedFont", justify="left")
+        difflabel.pack()
 
-        sys.stderr.write(diff_output)  # Just analytics, do not interfere with stdout
+        root.title("Diff view")
+
+        def destroy(event):
+            """Destroys a window and ends mainloop."""
+            root.destroy()
+
+        def terminate(event):
+            destroy(event)
+            sys.exit(1)
+
+        root.bind("<Return>", destroy)  # Enter key
+        root.bind("<Escape>", terminate)
+
+        root.mainloop()
+    else:
+        sys.stderr.write(diff)
 
     if use_clipboard:
         pyperclip.copy(after_text)

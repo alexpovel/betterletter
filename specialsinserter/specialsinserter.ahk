@@ -12,5 +12,6 @@ SetWorkingDir %A_ScriptDir% ; Ensures a consistent starting directory.
     Send, ^c
     ClipWait ; Wait for the clipboard to contain text.
     ; https://github.com/alexpovel/random_python/tree/master/specialsinserter :
-    RunWait python -m specialsinserter --clipboard de
+    ; `pythonw` is Windows-specific window-less Python interpreter
+    RunWait pythonw -m specialsinserter --clipboard --gui-confirm de
     Send, ^v ; Only paste after previous command finished (hence RunWait)
