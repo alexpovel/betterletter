@@ -1,8 +1,0 @@
-# Original dictionaries (not required for tool to work):
-dicts/*
-
-# Ship processed dictionaries though:
-!dicts/containing_specials_only
-
-# Clipboard (or general) backup file
-*.bak
