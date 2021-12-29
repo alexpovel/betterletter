@@ -1,4 +1,4 @@
-# specialsinserter
+# subalt
 
 In a given text, replaces alternative spellings of special characters with their proper spellings.
 
@@ -11,7 +11,7 @@ For example, German special characters and their corresponding alternative spell
 |        Ü/ü        |        Ue/ue         |
 |        ẞ/ß        |        SS/ss         |
 
-These pairings are recorded [here](specialsinserter/language_specials.json).
+These pairings are recorded [here](subalt/language_specials.json).
 
 Going from left to right is simple: replace all special characters with their alternative spellings, minding case.
 That use case is also supported by this tool (reverse flag).
@@ -35,7 +35,7 @@ The other direction is much less straightforward: there exist countless words fo
 
 just to name a few, pretty common examples.
 
-As such, this tool is based on a dictionary lookup, see also the [containing directory](specialsinserter/dicts/).
+As such, this tool is based on a dictionary lookup, see also the [containing directory](subalt/dicts/).
 
 ## Examples
 
@@ -106,7 +106,7 @@ Using poetry, from the project root, run:
 # otherwise pyproject.toml:
 poetry install
 # Run command within that environment:
-poetry run python -m specialsinserter -h
+poetry run python -m subalt -h
 ```
 
 ### Usage
@@ -115,7 +115,7 @@ Usage help (invoke from this project's root) will display all options:
 
 ```bash
 # Naked call (alternatively, use poetry)
-poetry run python -m specialsinserter -h
+poetry run python -m subalt -h
 ```
 
 The tool can read from STDIN (outputting to STDOUT), or work with the clipboard (overwriting its contents with a corrected version).
@@ -124,17 +124,17 @@ This allows for example:
 ```bash
 $ cat test.txt
 Hoeflich fragen!
-$ cat test.txt | poetry run python -m specialsinserter de
+$ cat test.txt | poetry run python -m subalt de
 Höflich fragen!
 # Reverse mode:
-$ cat test.txt | poetry run python -m specialsinserter de | poetry run python -m specialsinserter -r de
+$ cat test.txt | poetry run python -m subalt de | poetry run python -m subalt -r de
 Hoeflich fragen!
 ```
 
 or
 
 ```bash
-poetry run python -m specialsinserter -c de
+poetry run python -m subalt -c de
 # Nothing happens: clipboard is read and written to
 # silently.
 ```
@@ -168,7 +168,7 @@ However, if you installed successfully and have all requirements in place, you c
 this tool directly:
 
 ```bash
-python -m specialsinserter -h
+python -m subalt -h
 ```
 
 ## AutoHotKey
@@ -188,7 +188,7 @@ system-wide.
 *However*, the requirements need to be installed and available to the plain `python`
 command.
 
-The AutoHotKey file is [here](specialsinserter.ahk).
+The AutoHotKey file is [here](subalt.ahk).
 
 Follow [this guide](https://www.autohotkey.com/docs/FAQ.htm#Startup) to have the script
 launch on boot automatically.

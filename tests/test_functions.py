@@ -3,7 +3,7 @@ from contextlib import nullcontext
 from importlib.resources import open_text
 
 import pytest
-from specialsinserter import (ENCODING, cf_contains, combinations_any_length,
+from subalt import (ENCODING, cf_contains, combinations_any_length,
                               distinct_highest_element,
                               filter_strs_by_letter_occurrence,
                               represent_strings, substitute_alts_with_specials,
@@ -342,10 +342,10 @@ class TestMainDE:
     def known_words(self):
         """Provides same known words list as used by the main script."""
         # Use `open_text`: if this test suite runs successfully, it means import of
-        # specialsinserter worked. That way, `open_text` is also guaranteed to work.
+        # subalt worked. That way, `open_text` is also guaranteed to work.
         # Messing around here using relative Paths on the other hand is error-prone.
         with open_text(
-            "specialsinserter.dicts.containing_specials_only",
+            "subalt.dicts.containing_specials_only",
             "de.dic",
             encoding=ENCODING,
         ) as f:
@@ -356,7 +356,7 @@ class TestMainDE:
         """Provides same mapping of special characters to alt. spellings as main script.
         """
         with open_text(
-            "specialsinserter", "language_specials.json", encoding=ENCODING
+            "subalt", "language_specials.json", encoding=ENCODING
         ) as f:
             language_specials = json.load(f)
             return language_specials["de"]

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "specialsinserter"
+name = "subalt"
 version = "0.1.0"
 description = "Tool to replace text written using alternative spellings of special characters (e.g. German umlauts [ä, ö, ü] etc. [ß]), perhaps no proper keyboard layout was used, with text with the correct special characters in place."
 authors = ["Alex Povel"]
