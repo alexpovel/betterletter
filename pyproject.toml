@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "subalt"
-version = "0.1.0"
-description = "Tool to replace text written using alternative spellings of special characters (e.g. German umlauts [ä, ö, ü] etc. [ß]), perhaps no proper keyboard layout was used, with text with the correct special characters in place."
-authors = ["Alex Povel"]
+version = "1.0.0"
+description = "Substitute alternative spellings of special characters (e.g. German umlauts [ae, oe, ue] etc. [ss]) with their correct versions (ä, ö, ü, ß)."
+authors = ["Alex Povel <python@alexpovel.de>"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 pyperclip = "^1.8.0"
 
 [tool.poetry.dev-dependencies]

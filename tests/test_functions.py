@@ -3,11 +3,15 @@ from contextlib import nullcontext
 from importlib.resources import open_text
 
 import pytest
-from subalt import (ENCODING, cf_contains, combinations_any_length,
-                              distinct_highest_element,
-                              filter_strs_by_letter_occurrence,
-                              represent_strings, substitute_alts_with_specials,
-                              substitute_spans)
+from subalt.io import _ENCODING
+from subalt.itertools import (
+    combinations_any_length,
+    distinct_highest_element,
+    filter_strs_by_letter_occurrence,
+)
+from subalt.reprs import represent_strings
+from subalt.strtools import cf_contains
+from subalt.substitutions import substitute_alts_with_specials, substitute_spans
 
 # Placeholder for parameters that do not matter in that instance of a test, e.g.
 # when an exception is raised, so no result is produced.
@@ -183,7 +187,15 @@ class TestHelpers:
             ),
             (
                 [1, 2, 3],
-                [(1,), (2,), (3,), (1, 2), (1, 3), (2, 3), (1, 2, 3),],
+                [
+                    (1,),
+                    (2,),
+                    (3,),
+                    (1, 2),
+                    (1, 3),
+                    (2, 3),
+                    (1, 2, 3),
+                ],
                 nullcontext(),
             ),
             (
@@ -345,24 +357,26 @@ class TestMainDE:
         # subalt worked. That way, `open_text` is also guaranteed to work.
         # Messing around here using relative Paths on the other hand is error-prone.
         with open_text(
-            "subalt.dicts.containing_specials_only",
-            "de.dic",
-            encoding=ENCODING,
+            "subalt.redicts.filtered",
+            "de.txt",
+            encoding=_ENCODING,
         ) as f:
             return f.read().splitlines()
 
     @pytest.fixture
     def specials_to_alt_spellings(self):
-        """Provides same mapping of special characters to alt. spellings as main script.
-        """
-        with open_text(
-            "subalt", "language_specials.json", encoding=ENCODING
-        ) as f:
+        """Provides same mapping of special characters to alt. spellings as main script."""
+        with open_text("subalt.resources", "languages.json", encoding=_ENCODING) as f:
             language_specials = json.load(f)
             return language_specials["de"]
 
     @pytest.mark.parametrize(
-        ["text", "force", "result", "expectation",],
+        [
+            "text",
+            "force",
+            "result",
+            "expectation",
+        ],
         [
             ("Uebel", False, "Übel", nullcontext()),
             ("uebel", False, "übel", nullcontext()),
@@ -458,19 +472,84 @@ class TestMainDE:
                 nullcontext(),
             ),
             # `force=True`
-            ("Stroemelschnoesseldaemel", True, "Strömelschnößeldämel", nullcontext(),),
-            ("ae", True, "ä", nullcontext(),),
-            ("Ae", True, "Ä", nullcontext(),),
-            ("AE", True, "Ä", nullcontext(),),
-            ("oe", True, "ö", nullcontext(),),
-            ("Oe", True, "Ö", nullcontext(),),
-            ("OE", True, "Ö", nullcontext(),),
-            ("ue", True, "ü", nullcontext(),),
-            ("Ue", True, "Ü", nullcontext(),),
-            ("UE", True, "Ü", nullcontext(),),
-            ("ss", True, "ß", nullcontext(),),
-            ("Ss", True, "SS", nullcontext(),),
-            ("SS", True, "SS", nullcontext(),),
+            (
+                "Stroemelschnoesseldaemel",
+                True,
+                "Strömelschnößeldämel",
+                nullcontext(),
+            ),
+            (
+                "ae",
+                True,
+                "ä",
+                nullcontext(),
+            ),
+            (
+                "Ae",
+                True,
+                "Ä",
+                nullcontext(),
+            ),
+            (
+                "AE",
+                True,
+                "Ä",
+                nullcontext(),
+            ),
+            (
+                "oe",
+                True,
+                "ö",
+                nullcontext(),
+            ),
+            (
+                "Oe",
+                True,
+                "Ö",
+                nullcontext(),
+            ),
+            (
+                "OE",
+                True,
+                "Ö",
+                nullcontext(),
+            ),
+            (
+                "ue",
+                True,
+                "ü",
+                nullcontext(),
+            ),
+            (
+                "Ue",
+                True,
+                "Ü",
+                nullcontext(),
+            ),
+            (
+                "UE",
+                True,
+                "Ü",
+                nullcontext(),
+            ),
+            (
+                "ss",
+                True,
+                "ß",
+                nullcontext(),
+            ),
+            (
+                "Ss",
+                True,
+                "SS",
+                nullcontext(),
+            ),
+            (
+                "SS",
+                True,
+                "SS",
+                nullcontext(),
+            ),
         ],
     )
     def test_substitute_alts_with_specials(
