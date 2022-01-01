@@ -1,9 +1,11 @@
+import json
 import logging
 from functools import partial
 from pathlib import Path
 from typing import Iterable, Optional
 
-from subalt.itertools import filter_strs_by_letter_occurrence
+from subalt import _RESOURCES, ISO6391Code, LanguageMapping, WordLookup
+from subalt.itertools import apply_to_all, filter_strs
 
 logger = logging.getLogger(__name__)
 
@@ -14,24 +16,24 @@ _ENCODING = "utf8"
 open_with_encoding = partial(open, encoding=_ENCODING)
 
 
-def read_linedelimited_file(file: Path) -> list[str]:
+def read(file: Path) -> list[str]:
     with open_with_encoding(file) as f:
         lines = f.read().splitlines()
     logger.debug(f"Fetched list containing {len(lines)} items from {file}")
     return lines
 
 
-def write_linedelimited_file(file: Path, lines: list[str]) -> None:
+def write(file: Path, lines: list[str]) -> None:
     with open_with_encoding(file, "w") as f:
         f.write("\n".join(lines))
     logger.debug(f"Wrote file containing {len(lines)} lines to {file}")
 
 
-def prepare_processed_dictionary(
+def get_dictionary(
     file: Path,
     fallback_file: Path,
     letter_filters: Optional[Iterable[str]] = None,
-) -> list[str]:
+) -> WordLookup:
     """Provides words from a pre-processed file or additionally creates it if not found.
 
     Args:
@@ -39,24 +41,36 @@ def prepare_processed_dictionary(
         fallback_file: File to use and create new file from if main file not found.
         letter_filters: List of substrings items in the fallback file must contain to
             be returned and written to a new, processed file.
+
     Returns:
-        List of words from the read pre-preprocessed file.
+        Collection of words from the read pre-preprocessed file.
     """
     if letter_filters is None:
         letter_filters = []
     try:
-        items = read_linedelimited_file(file)
+        items = read(file)
         logger.debug("Found pre-processed list.")
     except FileNotFoundError:
         logger.debug("No pre-processed list found, creating from original.")
-        items = read_linedelimited_file(fallback_file)
+        items = read(fallback_file)
         logger.debug(f"Fetched unprocessed list.")
-        items = list(filter_strs_by_letter_occurrence(items, letter_filters))
-        write_linedelimited_file(file, items)
-    return items
+        items = list(filter_strs(items, letter_filters))
+        write(file, items)
+    return set(items)
 
 
 def backup_clipboard(text: str, file: Path) -> None:
     """Writes text content to file for backup purposes."""
     with open_with_encoding(file, "w") as f:
         f.write(text)
+
+
+def get_language_mappings() -> dict[ISO6391Code, LanguageMapping]:
+    with open_with_encoding((_RESOURCES / "languages").with_suffix(".json")) as f:
+        # Enforce lowercase so we can rely on it later on. Do not use `casefold` on keys,
+        # it lowercases too aggressively. E.g., it will turn 'ß' into 'ss', while keys
+        # are supposed to be the special letters themselves.
+        language_mappings: dict[ISO6391Code, LanguageMapping] = apply_to_all(
+            json.load(f), str.lower
+        )
+    return language_mappings

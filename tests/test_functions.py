@@ -5,13 +5,13 @@ from importlib.resources import open_text
 import pytest
 from subalt.io import _ENCODING
 from subalt.itertools import (
-    combinations_any_length,
-    distinct_highest_element,
-    filter_strs_by_letter_occurrence,
+    all_lengths_combinations,
+    distinct_greatest_element,
+    filter_strs,
 )
 from subalt.reprs import represent_strings
 from subalt.strtools import cf_contains
-from subalt.substitutions import substitute_alts_with_specials, substitute_spans
+from subalt.substitutions import forward, substitute_spans
 
 # Placeholder for parameters that do not matter in that instance of a test, e.g.
 # when an exception is raised, so no result is produced.
@@ -77,7 +77,7 @@ class TestHelpers:
     )
     def test_distinct_highest_element(self, iterable, key, element, expectation):
         with expectation:
-            assert distinct_highest_element(iterable, key) == element
+            assert distinct_greatest_element(iterable, key) == element
 
     @pytest.mark.parametrize(
         ["element", "string", "result", "expectation"],
@@ -163,7 +163,7 @@ class TestHelpers:
     ):
         with expectation:
             assert (
-                list(filter_strs_by_letter_occurrence(strings, letter_filters))
+                list(filter_strs(strings, letter_filters))
                 == result
             )
 
@@ -236,7 +236,7 @@ class TestHelpers:
     )
     def test_combinations_any_length(self, iterable, result, expectation):
         with expectation:
-            assert list(combinations_any_length(iterable)) == result
+            assert list(all_lengths_combinations(iterable)) == result
 
     @pytest.mark.parametrize(
         ["string", "spans", "spans_to_substitutions", "result", "expectation"],
@@ -557,7 +557,7 @@ class TestMainDE:
     ):
         with expectation:
             assert (
-                substitute_alts_with_specials(
+                forward(
                     text, specials_to_alt_spellings, known_words, force
                 )
                 == result

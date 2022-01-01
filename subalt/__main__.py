@@ -19,11 +19,11 @@ from typing import TYPE_CHECKING, Any, Iterable
 
 import pyperclip
 
-from subalt import _PACKAGE_ROOT
+from subalt import _PACKAGE_ROOT, _RESOURCES
 from subalt.io import (backup_clipboard, open_with_encoding,
-                       prepare_processed_dictionary)
+                       get_dictionary, get_language_mappings)
 from subalt.itertools import splitlines
-from subalt.substitutions import (substitute_alts_with_specials,
+from subalt.substitutions import (forward,
                                   substitute_specials_with_alts)
 
 logger = logging.getLogger(__name__)
@@ -79,22 +79,18 @@ def parse(description: str, lang_choices: Iterable[str]) -> dict[str, bool | str
 
 
 def main() -> None:
-    resources_dir = _PACKAGE_ROOT / "resources"
+    language_mappings = get_language_mappings()
 
-    with open_with_encoding(
-        (resources_dir / "languages").with_suffix(".json")
-    ) as f:
-        language_specials: dict[str, dict[str, str]] = json.load(f)
-
-    args = parse(description=__doc__, lang_choices=language_specials)
+    args = parse(description=__doc__, lang_choices=language_mappings.keys())
 
     if args["debug"]:
         # Leave at default if no logging/debugging requested.
         logging.basicConfig(level="DEBUG")
 
     language = str(args["language"])
+    language_mapping = language_mappings[language]
 
-    base_dict_path = resources_dir / Path("dicts")
+    base_dict_path = _RESOURCES / Path("dicts")
     base_dict_file = Path(language).with_suffix(".txt")
 
     use_clipboard = args["clipboard"]
@@ -112,26 +108,26 @@ def main() -> None:
 
     if args["reverse"]:
         out_text = substitute_specials_with_alts(
-            in_text, language_specials[language]
+            in_text, language_mapping
         )
     else:
         try:
-            known_words = prepare_processed_dictionary(
+            known_words = get_dictionary(
                 file=base_dict_path / Path("filtered") / base_dict_file,
                 fallback_file=base_dict_path / base_dict_file,
-                letter_filters=language_specials[language].keys(),
+                letter_filters=language_mapping.keys(),
             )
         except FileNotFoundError as e:
             raise FileNotFoundError(
                 f"Dictionary for {language=} not available (looked for '{e.filename}')"
             ) from e
 
-        out_text = substitute_alts_with_specials(
+        out_text = "".join(forward(
             text=in_text,
-            specials_to_alt_spellings=language_specials[language],
+            language_mapping=language_mapping,
             known_words=known_words,
             force=bool(args["force_all"]),
-        )
+        ))
 
     if args["diff"] or args["gui"]:
         raw_diff = Differ().compare(splitlines(in_text), splitlines(out_text))

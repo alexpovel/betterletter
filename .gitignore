@@ -1,3 +1,5 @@
+.vscode/
+
 # Clipboard (or general) backup file
 *.bak
 

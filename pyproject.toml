@@ -5,13 +5,14 @@ description = "Substitute alternative spellings of special characters (e.g. Germ
 authors = ["Alex Povel <python@alexpovel.de>"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/alexpovel/subalt/"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pyperclip = "^1.8.0"
+pyperclip = "^1.8.2"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.0.2"
+pytest = "^6.2.5"
 
 [build-system]
 requires = ["poetry>=0.12"]
