@@ -1,19 +1,26 @@
 [tool.poetry]
-name = "subalt"
-version = "1.0.0"
-description = "Substitute alternative spellings of native characters (e.g. German umlauts [ae, oe, ue] etc. [ss]) with their correct versions (ä, ö, ü, ß)."
 authors = ["Alex Povel <python@alexpovel.de>"]
+description = "Substitute alternative spellings of native characters (e.g. German umlauts [ae, oe, ue] etc. [ss]) with their correct versions (ä, ö, ü, ß)."
 license = "MIT"
+name = "subalt"
 readme = "README.md"
 repository = "https://github.com/alexpovel/subalt/"
+version = "1.0.0"
 
 [tool.poetry.dependencies]
-python = "^3.10"
 pyperclip = "^1.8.2"
+python = "^3.9"
 
 [tool.poetry.dev-dependencies]
+black = "^21.12b0"
+mypy = "^0.930"
 pytest = "^6.2.5"
+snakeviz = "^2.1.1"
+
+[tool.mypy]
+strict = true
+exclude = "tests/*"
 
 [build-system]
-requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
+requires = ["poetry>=0.12"]

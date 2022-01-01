@@ -1,19 +1,19 @@
 import logging
 from pathlib import Path
-from typing import Literal, TypeAlias
+from typing import Literal, Union
 
 _PACKAGE_ROOT = Path(__file__).parent
 _RESOURCES = _PACKAGE_ROOT / "resources"
 
 VERBOSE = logging.DEBUG - 1  # A level below even debug, logging's lowest
 
-AlternativeSpelling: TypeAlias = str
-NativeSpelling: TypeAlias = str
-LanguageMapping: TypeAlias = dict[NativeSpelling, AlternativeSpelling]
-Span: TypeAlias = tuple[int, int]
-WordLookup: TypeAlias = set[str]
-ISO6391Code: TypeAlias = (
-    str |
+AlternativeSpelling = str
+NativeSpelling = str
+LanguageMapping = dict[NativeSpelling, AlternativeSpelling]
+Span = tuple[int, int]
+WordLookup = set[str]
+ISO6391Code = Union[
+    str,
     # Stupid? Maybe. Useless? Probably.
     Literal[  # https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
         "aa",
@@ -199,5 +199,5 @@ ISO6391Code: TypeAlias = (
         "za",
         "zh",
         "zu",
-    ]
-)
+    ],
+]

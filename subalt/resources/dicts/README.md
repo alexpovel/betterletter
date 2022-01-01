@@ -9,9 +9,19 @@ Dictionaries are expected to have the following properties:
 
 ## Filtering
 
-Dictionaries could be filtered to only contain words with native characters in the first place.
-However, shorter dictionaries do not do much: word lookup is, thanks to sets, *O(1)* anyway.
-Memory footprint would be improved slightly, but this is a matter of only a couple Megabyte.
+Dictionaries are filtered to only contain words containing any native characters.
+If no filtered dictionary is available, a new one is created at first startup.
+In the case of German, a size difference of 3 to 1 was observed.
+
+### Rationale
+
+Word lookup is, thanks to sets, *O(1)* : not much is gained there.
+Memory footprint is improved slightly, but this is a matter of only a couple Megabyte.
+
+However, at time of writing, the full German dictionary is around 32 MB in size, the filtered one around 11 MB.
+Through profiling, a load-up (reading in the dictionary) time of roughly 0.01 seconds per MB was observed, on the currently fastest hardware class (NVMe SSD).
+A 32 MB dictionary approaches a half second of load-up, which is too long.
+This is the main motivation for filtering dictionaries down for usage.
 
 ## Sources
 

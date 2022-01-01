@@ -1,5 +1,11 @@
 .vscode/
 
+# Not part of the repo but created on-demand:
+subalt/resources/dicts/filtered/*.txt
+
+# cProfile output files
+*.profile
+
 # Clipboard (or general) backup file
 *.bak
 

@@ -14,7 +14,7 @@ import sys
 import tkinter as tk
 from difflib import Differ
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Iterable
+from typing import TYPE_CHECKING, Any, Iterable, Union
 
 try:
     import pyperclip
@@ -23,14 +23,14 @@ try:
 except ImportError:
     _PYPERCLIP_AVAILABLE = False
 
-from subalt import _PACKAGE_ROOT, _RESOURCES, substituters
+from subalt import _PACKAGE_ROOT, substituters
 from subalt.io import backup_clipboard, get_dictionary, get_language_mappings
 from subalt.iteration import splitlines
 
 logger = logging.getLogger(__name__)
 
 
-def parse(description: str, lang_choices: Iterable[str]) -> dict[str, bool | str]:
+def parse(description: str, lang_choices: Iterable[str]) -> dict[str, Union[bool, str]]:
     """Prepares, runs and returns parsing of CLI arguments for the script."""
     parser = argparse.ArgumentParser(description=description)
 
@@ -40,7 +40,7 @@ def parse(description: str, lang_choices: Iterable[str]) -> dict[str, bool | str
         choices=lang_choices,
     )
 
-    kwargs: dict[str, str | bool]  # Satisfy mypy
+    kwargs: dict[str, Union[str, bool]]  # Satisfy mypy
     if _PYPERCLIP_AVAILABLE:
         kwargs = {
             "help": "Read from and write back to clipboard instead of STDIN/STDOUT.",

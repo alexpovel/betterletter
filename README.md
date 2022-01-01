@@ -138,29 +138,51 @@ poetry run python -m subalt -c de
 
 After installing (see below) the package, these calls should work system-wide.
 
-### Run tests
+## Development
+
+Development tasks are all run through `poetry`, within the context of the virtual environment.
+The latter is created through
+
+```bash
+poetry install
+```
+
+and then accessed through either `poetry run <command>` or `poetry shell`.
+
+### Tests
 
 The testing framework is installed as a development dependency.
 This allows us, after `poetry install`, to simply run:
 
 ```bash
-poetry run pytest
+make tests
 ```
 
-### Run profiling
+### Type-checking
+
+The project is fully typed and passes strict checking:
+
+```bash
+make checks
+```
+
+Configure your IDE to do this on every save.
+
+### Profiling
 
 Using [snakeviz](https://jiffyclub.github.io/snakeviz/):
 
 ```bash
-input="Hoeren waere gut."
-outfile="subalt.profile"
-echo "$input" | python -m cProfile --outfile="$outfile" -m subalt de
-snakeviz "$outfile"
+make profile
 ```
 
-## Special Features
+### Formatting
 
-Fully typed, passing `mypy --strict`, and has a passing test suite based on `pytest`.
+```bash
+make formatting
+```
+
+Better way: configure your IDE to format on saving.
 
 ## AutoHotKey
 
