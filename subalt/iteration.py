@@ -3,6 +3,7 @@ from collections.abc import Callable
 from itertools import combinations
 from typing import Any, Iterable, Iterator, TypeVar
 
+from subalt import VERBOSE
 from subalt.strings import cf_contains
 
 logger = logging.getLogger(__name__)
@@ -43,7 +44,7 @@ def filter_strings(
     """
     for string in strings:
         if any(cf_contains(ltr, string) for ltr in letter_filters):
-            logger.debug(f"Yielding '{string}'.")
+            logger.log(level=VERBOSE, msg=f"Yielding {string=}")  # Called very often
             yield string
 
 
