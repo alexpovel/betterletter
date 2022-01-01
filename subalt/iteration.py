@@ -3,7 +3,7 @@ from collections.abc import Callable
 from itertools import combinations
 from typing import Any, Iterable, Iterator, TypeVar
 
-from subalt.strtools import cf_contains
+from subalt.strings import cf_contains
 
 logger = logging.getLogger(__name__)
 

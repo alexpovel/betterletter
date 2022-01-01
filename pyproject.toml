@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "subalt"
 version = "1.0.0"
-description = "Substitute alternative spellings of special characters (e.g. German umlauts [ae, oe, ue] etc. [ss]) with their correct versions (ä, ö, ü, ß)."
+description = "Substitute alternative spellings of native characters (e.g. German umlauts [ae, oe, ue] etc. [ss]) with their correct versions (ä, ö, ü, ß)."
 authors = ["Alex Povel <python@alexpovel.de>"]
 license = "MIT"
 readme = "README.md"

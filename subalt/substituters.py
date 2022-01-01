@@ -3,8 +3,7 @@ import re
 from typing import Iterator
 
 from subalt import LanguageMapping, NativeSpelling, Span, WordLookup
-from subalt.itertools import all_lengths_combinations, subset
-from subalt.reprs import represent_strings
+from subalt.iteration import all_lengths_combinations, subset
 
 logger = logging.getLogger(__name__)
 

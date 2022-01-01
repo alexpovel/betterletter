@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Iterable, Optional
 
 from subalt import _RESOURCES, ISO6391Code, LanguageMapping, WordLookup
-from subalt.itertools import apply_to_all, filter_strings
+from subalt.iteration import apply_to_all, filter_strings
 
 logger = logging.getLogger(__name__)
 
@@ -30,8 +30,7 @@ def write(file: Path, lines: list[str]) -> None:
 
 
 def get_dictionary(
-    file: Path,
-    fallback_file: Path,
+    language: ISO6391Code,
     letter_filters: Optional[Iterable[str]] = None,
 ) -> WordLookup:
     """Provides words from a pre-processed file or additionally creates it if not found.
@@ -45,6 +44,10 @@ def get_dictionary(
     Returns:
         Collection of words from the read pre-preprocessed file.
     """
+    base_path = _RESOURCES / Path("dicts")
+    base_file = Path(language).with_suffix(".txt")
+    file = base_path / Path("filtered") / base_file
+
     if letter_filters is None:
         letter_filters = []
     try:
@@ -52,7 +55,8 @@ def get_dictionary(
         logger.debug("Found pre-processed list.")
     except FileNotFoundError:
         logger.debug("No pre-processed list found, creating from original.")
-        items = read(fallback_file)
+        fallback = base_path / base_file
+        items = read(fallback)
         logger.debug(f"Fetched unprocessed list.")
         items = list(filter_strings(items, letter_filters))
         write(file, items)

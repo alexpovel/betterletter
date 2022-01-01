@@ -18,13 +18,14 @@ from typing import TYPE_CHECKING, Any, Iterable
 
 try:
     import pyperclip
+
     _PYPERCLIP_AVAILABLE = True
 except ImportError:
     _PYPERCLIP_AVAILABLE = False
 
-from subalt import _PACKAGE_ROOT, _RESOURCES, substitutions
+from subalt import _PACKAGE_ROOT, _RESOURCES, substituters
 from subalt.io import backup_clipboard, get_dictionary, get_language_mappings
-from subalt.itertools import splitlines
+from subalt.iteration import splitlines
 
 logger = logging.getLogger(__name__)
 
@@ -53,11 +54,7 @@ def parse(description: str, lang_choices: Iterable[str]) -> dict[str, bool | str
             "default": False,
         }
 
-    parser.add_argument(
-        "-c",
-        "--clipboard",
-        **kwargs  # type: ignore
-    )
+    parser.add_argument("-c", "--clipboard", **kwargs)  # type: ignore
 
     parser.add_argument(
         "-f",
@@ -105,9 +102,6 @@ def main() -> None:
     language = str(args["language"])
     language_mapping = language_mappings[language]
 
-    base_dict_path = _RESOURCES / Path("dicts")
-    base_dict_file = Path(language).with_suffix(".txt")
-
     use_clipboard = args["clipboard"]
 
     if use_clipboard:
@@ -122,12 +116,11 @@ def main() -> None:
         logger.warning(f"Empty input received ({possible_empty_reason}).")
 
     if args["reverse"]:
-        out_text = substitutions.substitute_specials_with_alts(in_text, language_mapping)
+        out_text = substituters.backward(in_text, language_mapping)
     else:
         try:
             known_words = get_dictionary(
-                file=base_dict_path / Path("filtered") / base_dict_file,
-                fallback_file=base_dict_path / base_dict_file,
+                language=language,
                 letter_filters=language_mapping.keys(),
             )
         except FileNotFoundError as e:
@@ -136,7 +129,7 @@ def main() -> None:
             ) from e
 
         out_text = "".join(
-            substitutions.forward(
+            substituters.forward(
                 text=in_text,
                 language_mapping=language_mapping,
                 known_words=known_words,

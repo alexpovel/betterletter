@@ -1,22 +1,22 @@
 # subalt
 
-In a given text, replaces alternative spellings of special characters with their proper spellings.
+In a given text, replaces alternative spellings of native characters with their proper spellings.
 
-For example, German special characters and their corresponding alternative spellings (e.g. when no proper keyboard layout is at hand, or ASCII is used) are:
+For example, German native characters and their corresponding alternative spellings (e.g. when no proper keyboard layout is at hand, or ASCII is used) are:
 
-| Special Character | Alternative Spelling |
+| Native Character | Alternative Spelling |
 | :---------------: | :------------------: |
 |        Ä/ä        |        Ae/ae         |
 |        Ö/ö        |        Oe/oe         |
 |        Ü/ü        |        Ue/ue         |
 |        ẞ/ß        |        SS/ss         |
 
-These pairings are recorded [here](subalt/language_specials.json).
+These pairings are recorded [here](subalt/resources/languages.json).
 
-Going from left to right is simple: replace all special characters with their alternative spellings, minding case.
-That use case is also supported by this tool (reverse flag).
+Going from left to right is simple: replace all native characters with their alternative spellings, minding case.
+That use case is also supported by this tool (`reverse` flag).
 
-The other direction is much less straightforward: there exist countless words for which alternative spellings occur somewhere as a pattern, yet replacing them with the corresponding special character would be wrong:
+The other direction is much less straightforward: there exist countless words for which alternative spellings occur somewhere as a pattern, yet replacing them with the corresponding native character would be wrong:
 
 | Character | Correct Spelling  | Wrong Spelling |
 | --------- | ----------------- | -------------- |
@@ -35,7 +35,7 @@ The other direction is much less straightforward: there exist countless words fo
 
 just to name a few, pretty common examples.
 
-As such, this tool is based on a dictionary lookup, see also the [containing directory](subalt/dicts/).
+As such, this tool is based on a dictionary lookup, see also the [containing directory](subalt/resources/dicts/).
 
 ## Examples
 
@@ -101,8 +101,7 @@ Refer to the [poetry config file](pyproject.toml) for more info (e.g. the requir
 Using poetry, from the project root, run:
 
 ```bash
-# Install virtual environment according to lock file
-# (if available in repo),
+# Installs virtual environment according to lock file (if available in repo),
 # otherwise pyproject.toml:
 poetry install
 # Run command within that environment:
@@ -114,7 +113,6 @@ poetry run python -m subalt -h
 Usage help (invoke from this project's root) will display all options:
 
 ```bash
-# Naked call (alternatively, use poetry)
 poetry run python -m subalt -h
 ```
 
@@ -135,8 +133,7 @@ or
 
 ```bash
 poetry run python -m subalt -c de
-# Nothing happens: clipboard is read and written to
-# silently.
+# Nothing happens: clipboard is read and written to silently.
 ```
 
 After installing (see below) the package, these calls should work system-wide.
@@ -150,45 +147,19 @@ This allows us, after `poetry install`, to simply run:
 poetry run pytest
 ```
 
-## Installation
-
-You can install this project system-wide, using your system Python:
-
-```bash
-pip install --editable .
-```
-
-This relies on [setup.py](setup.py) (which `poetry` does not use).
-An editable install (symlink) mode allows you to modify the source without having to
-reinstall.
-
-Note that this approach is discouraged, since your system Python might conflict with
-the [requirements](pyproject.toml) of this project (hence, `poetry`).
-However, if you installed successfully and have all requirements in place, you can call
-this tool directly:
-
-```bash
-python -m subalt -h
-```
-
 ## AutoHotKey
 
-This tool can be integrated with [AutoHotKey](https://www.autohotkey.com/), allowing you
-to use it at the touch of a button.
-This can be used to setup a keyboard shortcut to run this tool in-place, quickly replacing
-what you need without leaving your text editing environment.
+This tool can be integrated with [AutoHotKey](https://www.autohotkey.com/), allowing you to use it at the touch of a button.
+This can be used to setup a keyboard shortcut to run this tool in-place, quickly replacing what you need without leaving your text editing environment.
 
 I was unable to use `poetry` commands for this, getting
 
 > The system cannot find the file specified.
 
 It works with plain `python` invocations.
-Thanks to `SetWorkingDir`, we do *not* have to [install](#installation) the module
-system-wide.
-*However*, the requirements need to be installed and available to the plain `python`
-command.
+Thanks to `SetWorkingDir`, we do *not* have to install the module system-wide.
+*However*, the requirements need to be installed and available to the plain `python` command.
 
 The AutoHotKey file is [here](subalt.ahk).
 
-Follow [this guide](https://www.autohotkey.com/docs/FAQ.htm#Startup) to have the script
-launch on boot automatically.
+Follow [this guide](https://www.autohotkey.com/docs/FAQ.htm#Startup) to have the script launch on boot automatically.

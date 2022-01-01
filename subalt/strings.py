@@ -1,11 +1,8 @@
-from functools import reduce
-import re
-from typing import Iterable
-from subalt import AlternativeSpelling, ISO6391Code
 import logging
 import operator as op
-
-# from subalt.io import get_language_mappings
+import re
+from functools import reduce
+from typing import Iterable
 
 logger = logging.getLogger(__name__)
 
