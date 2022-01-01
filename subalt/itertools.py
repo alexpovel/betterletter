@@ -1,9 +1,8 @@
 import logging
 from collections.abc import Callable
 from itertools import combinations
-from typing import Any, Iterable, Iterator, Optional, TypeVar
+from typing import Any, Iterable, Iterator, TypeVar
 
-# from subalt import C
 from subalt.strtools import cf_contains
 
 logger = logging.getLogger(__name__)
@@ -27,7 +26,9 @@ def subset(dictionary: dict[K, V], select: Iterable[K]) -> dict[K, V]:
     return {k: dictionary[k] for k in keys}
 
 
-def filter_strs(strings: Iterable[str], letter_filters: Iterable[str]) -> Iterator[str]:
+def filter_strings(
+    strings: Iterable[str], letter_filters: Iterable[str]
+) -> Iterator[str]:
     """Filters strings by only retaining those which contain any filter letters.
 
     Comparison for filtering is caseless.
@@ -44,50 +45,6 @@ def filter_strs(strings: Iterable[str], letter_filters: Iterable[str]) -> Iterat
         if any(cf_contains(ltr, string) for ltr in letter_filters):
             logger.debug(f"Yielding '{string}'.")
             yield string
-
-
-def distinct_greatest_element(
-    iterable: Iterable[Any], key: Optional[Callable[[Any], Any]] = None
-) -> Optional[Any]:
-    """Gets one element if it compares greater than all others according to some key.
-
-    For example, using `key=len`, the list `[(1, 2), (3, 4)]` has two tuples of the
-    same length: no value (2 and 2) compares greater than any other. The iterable
-    `[(1, 2), (3, 4), (5, 6, 7)]` has an element of length 3, which is greater than
-    the second-highest (here: longest, due to the `key`), returning that element.
-
-    If `key` is `None`, the values of elements are compared directly, instead of some
-    property (`key`) of those elements. As such, `[1, 1]` fails, but `[1, 1, 2]` etc.
-    returns the found element, `2`.
-
-    Args:
-        iterable: The iterable to be examined.
-        key: The key to compare the iterable elements by. If None, element values are
-            used directly.
-
-    Returns:
-        The distinctly single-highest element according to the key criterion if it
-        exists, else None.
-    """
-    # If iterable is already sorted, Python's timsort will be very fast and little
-    # superfluous work will have to be done.
-    sorted_iterable = sorted(iterable, key=key)
-    highest = sorted_iterable[-1]
-
-    try:
-        second_highest = sorted_iterable[-2]
-    except IndexError:
-        # Iterable of length one necessarily has one distinct element.
-        return highest
-
-    if key is None:
-        identity = lambda _: _
-        key = identity
-
-    if key(highest) > key(second_highest):
-        return highest
-
-    return None  # Fell through, explicit return for mypy
 
 
 T = TypeVar("T")

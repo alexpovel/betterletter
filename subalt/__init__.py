@@ -1,14 +1,11 @@
-from abc import abstractmethod
 from pathlib import Path
-from typing import Any, Protocol, TypeAlias, TypeVar
-from enum import Enum
+from typing import TypeAlias
 
 _PACKAGE_ROOT = Path(__file__).parent
 _RESOURCES = _PACKAGE_ROOT / "resources"
 
 
-# https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
-ISO639_1_CODES = {
+ISO639_1_CODES = {  # https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
     "aa": "Afar",
     "ab": "Abkhazian",
     "ae": "Avestan",

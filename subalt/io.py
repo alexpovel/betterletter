@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Iterable, Optional
 
 from subalt import _RESOURCES, ISO6391Code, LanguageMapping, WordLookup
-from subalt.itertools import apply_to_all, filter_strs
+from subalt.itertools import apply_to_all, filter_strings
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ def get_dictionary(
         logger.debug("No pre-processed list found, creating from original.")
         items = read(fallback_file)
         logger.debug(f"Fetched unprocessed list.")
-        items = list(filter_strs(items, letter_filters))
+        items = list(filter_strings(items, letter_filters))
         write(file, items)
     return set(items)
 

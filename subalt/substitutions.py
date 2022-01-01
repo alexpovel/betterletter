@@ -9,7 +9,7 @@ from subalt.reprs import represent_strings
 logger = logging.getLogger(__name__)
 
 
-def substitute_spans(
+def _substitute_spans(
     string: str,
     substitutions: dict[Span, NativeSpelling],
 ) -> str:
@@ -113,7 +113,7 @@ def forward(
         logger.debug(f"Will test the following substitution sets: {all_substitutions}")
 
         candidates = [
-            substitute_spans(item, substitution) for substitution in all_substitutions
+            _substitute_spans(item, substitution) for substitution in all_substitutions
         ]
         logger.debug(f"Word candidates for replacement are: {candidates}")
 
@@ -122,8 +122,7 @@ def forward(
             # fewer. There is no ambiguity as long as the mapping of alternative
             # spellings to originals is bijective, e.g. 'ue' only maps to 'ü' and vice
             # versa. This is assumed to always be the case.
-            legal_candidates = [sorted(candidates, key=len)[0]]
-            legal_source = "forced"
+            item = sorted(candidates, key=len)[0]
         else:
             # Check whether different, specific cases are legal words.
             if item.islower():
@@ -145,66 +144,42 @@ def forward(
                 for candidate in candidates
             }
 
-            legal_candidates = [
-                candidate
-                for candidate, cases in candidate_cases.items()
-                if any(case in known_words for case in cases)
-            ]
-            legal_source = "found in dictionary"
-
-        logger.debug(
-            f"Legal ({legal_source}) word candidates for replacement"
-            f" are: {legal_candidates}"
-        )
-
-        n_candidates = len(legal_candidates)
-        if n_candidates == 1:
-            item = legal_candidates[0]
-        elif n_candidates > 1:
-            item = represent_strings(legal_candidates)
-        else:
-            logger.warning(
-                f"Substitutions took place but {item=} has no legal candidates."
-            )
-
+            try:
+                item = next(  # Get the first one, then quit
+                    candidate
+                    for candidate, cases in candidate_cases.items()
+                    if any(case in known_words for case in cases)
+                )
+            except StopIteration:  # Not a problem, `item` remains untouched
+                logger.warning(
+                    f"No dictionary entry found for any candidates in {candidate_cases}"
+                )
         logger.debug(f"Yielding fully processed {item=}")
         yield item
 
 
-def substitute_specials_with_alts(
+def backward(
     text: str,
-    specials_to_alt_spellings: dict[str, str],
+    language_mapping: LanguageMapping,
 ) -> str:
-    """Replaces all special characters in a text with their alternative spellings.
+    """Replaces all native characters in a text with their alternative spellings.
 
     No dictionary check is performed, since this operation is much simpler than its
     reverse.
 
     Args:
         text: The string in which to do the substitutions.
-        specials_to_alt_spellings: A mapping of special characters to their alternative
-            spellings (like 'ä' -> 'ae'). Can be lower- or uppercase.
+        language_mapping: A mapping of special characters to their alternative spellings
+            (like 'ä' -> 'ae'). Can be lower- or uppercase.
 
     Returns:
         The text with replacements made, in the correct case.
     """
     table = {}
-    for special_char, alt_spelling in specials_to_alt_spellings.items():
-        # Create a table mapping *both* lower- and uppercase of the special character
-        # to an appropriate replacement.
-        lower, upper = special_char.lower(), special_char.upper()
-        if len(lower) == 1:
-            # Translation table keys have to be of length one. However, special chars
-            # like can run into: 'ß'.lower() -> 'ss', which is not a valid key.
-            table[lower] = alt_spelling.lower()
-        if len(upper) == 1:
-            # I am unaware of any special chars where the upper() method returns a
-            # string longer 1, but just in case, it is included here.
-            #
-            # `str.capitalize()` turns e.g. 'ae' into 'Ae', the appropriate
-            # representation for an uppercase 'Ä' letter (as opposed to 'AE' from
-            # `str.upper()`).
-            table[upper] = alt_spelling.capitalize()
+    for native, alt in language_mapping.items():
+        lower, upper = native.lower(), native.upper()
+        table[lower] = alt.lower()
+        table[upper] = alt.capitalize()
     # str.translate requires 'ordinals: string' mappings, not just 'string: string'
     trans = str.maketrans(table)
     return text.translate(trans)

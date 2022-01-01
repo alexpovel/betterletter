@@ -8,7 +8,6 @@ This program is dictionary-based to check if replacements are valid words.
 """
 
 import argparse
-import json
 import logging
 import re
 import sys
@@ -17,14 +16,15 @@ from difflib import Differ
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Iterable
 
-import pyperclip
+try:
+    import pyperclip
+    _PYPERCLIP_AVAILABLE = True
+except ImportError:
+    _PYPERCLIP_AVAILABLE = False
 
-from subalt import _PACKAGE_ROOT, _RESOURCES
-from subalt.io import (backup_clipboard, open_with_encoding,
-                       get_dictionary, get_language_mappings)
+from subalt import _PACKAGE_ROOT, _RESOURCES, substitutions
+from subalt.io import backup_clipboard, get_dictionary, get_language_mappings
 from subalt.itertools import splitlines
-from subalt.substitutions import (forward,
-                                  substitute_specials_with_alts)
 
 logger = logging.getLogger(__name__)
 
@@ -38,12 +38,27 @@ def parse(description: str, lang_choices: Iterable[str]) -> dict[str, bool | str
         help="Text language to work with, in ISO 639-1 format.",
         choices=lang_choices,
     )
+
+    kwargs: dict[str, str | bool]  # Satisfy mypy
+    if _PYPERCLIP_AVAILABLE:
+        kwargs = {
+            "help": "Read from and write back to clipboard instead of STDIN/STDOUT.",
+            "action": "store_true",
+        }
+    else:
+        kwargs = {
+            "help": "Clipboard functionality unavailable (pyperclip not installed).",
+            # False in all cases:
+            "action": "store_false",
+            "default": False,
+        }
+
     parser.add_argument(
         "-c",
         "--clipboard",
-        help="Read from and write back to clipboard instead of STDIN/STDOUT.",
-        action="store_true",
+        **kwargs  # type: ignore
     )
+
     parser.add_argument(
         "-f",
         "--force-all",
@@ -107,9 +122,7 @@ def main() -> None:
         logger.warning(f"Empty input received ({possible_empty_reason}).")
 
     if args["reverse"]:
-        out_text = substitute_specials_with_alts(
-            in_text, language_mapping
-        )
+        out_text = substitutions.substitute_specials_with_alts(in_text, language_mapping)
     else:
         try:
             known_words = get_dictionary(
@@ -122,12 +135,14 @@ def main() -> None:
                 f"Dictionary for {language=} not available (looked for '{e.filename}')"
             ) from e
 
-        out_text = "".join(forward(
-            text=in_text,
-            language_mapping=language_mapping,
-            known_words=known_words,
-            force=bool(args["force_all"]),
-        ))
+        out_text = "".join(
+            substitutions.forward(
+                text=in_text,
+                language_mapping=language_mapping,
+                known_words=known_words,
+                force=bool(args["force_all"]),
+            )
+        )
 
     if args["diff"] or args["gui"]:
         raw_diff = Differ().compare(splitlines(in_text), splitlines(out_text))
