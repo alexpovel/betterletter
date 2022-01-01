@@ -4,7 +4,7 @@ Dictionaries are expected to have the following properties:
 
 - UTF-8 encoding
 - entries are newline-delimited (both `CRLF` and `LF` work)
-- have a corresponding language entry in `languages.json`
+- have a corresponding language entry in [`languages.json`](../languages.json)
 - no sorting required
 
 ## Filtering
@@ -15,7 +15,7 @@ In the case of German, a size difference of 3 to 1 was observed.
 
 ### Rationale
 
-Word lookup is, thanks to sets, *O(1)* : not much is gained there.
+Word lookup is, thanks to sets, *O(1)*: not much is gained in terms of lookup speed.
 Memory footprint is improved slightly, but this is a matter of only a couple Megabyte.
 
 However, at time of writing, the full German dictionary is around 32 MB in size, the filtered one around 11 MB.
