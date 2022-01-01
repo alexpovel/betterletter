@@ -4,12 +4,12 @@ In a given text, replaces alternative spellings of native characters with their 
 
 For example, German native characters and their corresponding alternative spellings (e.g. when no proper keyboard layout is at hand, or ASCII is used) are:
 
-| Native Character  | Alternative Spelling |
-| :---------------: | :------------------: |
-|        Ä/ä        |        Ae/ae         |
-|        Ö/ö        |        Oe/oe         |
-|        Ü/ü        |        Ue/ue         |
-|        ẞ/ß        |        SS/ss         |
+| Native Character | Alternative Spelling |
+| :--------------: | :------------------: |
+|       Ä/ä        |        Ae/ae         |
+|       Ö/ö        |        Oe/oe         |
+|       Ü/ü        |        Ue/ue         |
+|       ẞ/ß        |        SS/ss         |
 
 These pairings are recorded [here](subalt/resources/languages.json).
 
@@ -145,6 +145,17 @@ This allows us, after `poetry install`, to simply run:
 
 ```bash
 poetry run pytest
+```
+
+### Run profiling
+
+Using [snakeviz](https://jiffyclub.github.io/snakeviz/):
+
+```bash
+input="Hoeren waere gut."
+outfile="subalt.profile"
+echo "$input" | python -m cProfile --outfile="$outfile" -m subalt de
+snakeviz "$outfile"
 ```
 
 ## Special Features
