@@ -73,7 +73,7 @@ def get_language_mappings() -> dict[ISO6391Code, LanguageMapping]:
     with open_with_encoding((_RESOURCES / "languages").with_suffix(".json")) as f:
         # Enforce lowercase so we can rely on it later on. Do not use `casefold` on keys,
         # it lowercases too aggressively. E.g., it will turn 'ß' into 'ss', while keys
-        # are supposed to be the special letters themselves.
+        # are supposed to be the native letters themselves.
         language_mappings: dict[ISO6391Code, LanguageMapping] = apply_to_all(
             json.load(f), str.lower
         )

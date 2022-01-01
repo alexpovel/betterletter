@@ -1,15 +1,20 @@
-# Dictionaries for spell-checking
+# Spell-checking dictionaries (word lists)
 
-The [subdirectory](filtered) contains the same dictionaries as this base directory, but filtered to only hold words actually containing special characters of the respective languages.
+Dictionaries are expected to have the following properties:
 
-So if a base dictionary contains *x* entries, but only a quarter of the word entries contain special characters, the filtered dictionaries will be much shorter.
-By extension, this should make searching through them, and therefore virtually the entire program, faster by roughly the same factor.
+- UTF-8 encoding
+- entries are newline-delimited (both `CRLF` and `LF` work)
+- have a corresponding language entry in `languages.json`
+- no sorting required
 
-**The filtered dictionaries are created automatically if not already present**.
-They can therefore be recreated by deleting them.
+## Filtering
+
+Dictionaries could be filtered to only contain words with native characters in the first place.
+However, shorter dictionaries do not do much: word lookup is, thanks to sets, *O(1)* anyway.
+Memory footprint would be improved slightly, but this is a matter of only a couple Megabyte.
 
 ## Sources
 
-### de
-
-- <https://sourceforge.net/projects/germandict/files/>
+| Language | Source                                               | License                                                                                                  |
+| :------- | :--------------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
+| de       | <https://sourceforge.net/projects/germandict/files/> | [Public Domain](https://web.archive.org/web/20220101173037/https://sourceforge.net/projects/germandict/) |

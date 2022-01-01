@@ -49,7 +49,7 @@ def forward(
 ) -> Iterator[str]:
     """Substitutes all alternative spellings with their native versions in a text.
 
-    Special words can be problematic, e.g. 'Abenteuer'. The algorithm finds 'ue', but a
+    Certain words can be problematic, e.g. 'Abenteuer'. The algorithm finds 'ue', but a
     possible substitution of 'Abenteür' is illegal. Therefore, words with replacements
     are only *candidates* at first and have to get checked against a dictionary.
 
@@ -61,7 +61,7 @@ def forward(
 
     Args:
         text: The text in which alternative spellings are to be replaced.
-        language_mapping: A mapping of special characters to their alternative
+        language_mapping: A mapping of native characters to their alternative
             spellings.
         known_words: A collection of known words against which potential candidates for
             replacement are compared (since by far not all replacements possible as
@@ -73,7 +73,7 @@ def forward(
             substitutions, since substitutions generally shorten words (like ue -> ü).
 
     Returns:
-        The text with all alternative spellings of special characters in words replaced
+        The text with all alternative spellings of native characters in words replaced
         with (legal) versions with proper (UTF-8) characters.
     """
     native_to_alternative_regexes = {
@@ -168,7 +168,7 @@ def backward(
 
     Args:
         text: The string in which to do the substitutions.
-        language_mapping: A mapping of special characters to their alternative spellings
+        language_mapping: A mapping of native characters to their alternative spellings
             (like 'ä' -> 'ae'). Can be lower- or uppercase.
 
     Returns:

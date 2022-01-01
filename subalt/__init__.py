@@ -1,10 +1,17 @@
+import logging
 from pathlib import Path
 from typing import Literal, TypeAlias
 
 _PACKAGE_ROOT = Path(__file__).parent
 _RESOURCES = _PACKAGE_ROOT / "resources"
 
+VERBOSE = logging.DEBUG - 1  # A level below even debug, logging's lowest
 
+AlternativeSpelling: TypeAlias = str
+NativeSpelling: TypeAlias = str
+LanguageMapping: TypeAlias = dict[NativeSpelling, AlternativeSpelling]
+Span: TypeAlias = tuple[int, int]
+WordLookup: TypeAlias = set[str]
 ISO6391Code: TypeAlias = (
     str |
     # Stupid? Maybe. Useless? Probably.
@@ -194,8 +201,3 @@ ISO6391Code: TypeAlias = (
         "zu",
     ]
 )
-AlternativeSpelling: TypeAlias = str
-NativeSpelling: TypeAlias = str
-LanguageMapping: TypeAlias = dict[NativeSpelling, AlternativeSpelling]
-Span: TypeAlias = tuple[int, int]
-WordLookup: TypeAlias = set[str]

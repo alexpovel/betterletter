@@ -1,7 +1,7 @@
 #!/bin/env python3
 
-"""Tool to replace alternative spellings of special characters
-(e.g. German umlauts [ä, ö, ü] etc. [ß]) with the proper special characters.
+"""Tool to replace alternative spellings of native characters
+(e.g. German umlauts [ä, ö, ü] etc. [ß]) with the proper native characters.
 For example, this problem occurs when no proper keyboard layout was available.
 
 This program is dictionary-based to check if replacements are valid words.
@@ -66,7 +66,7 @@ def parse(description: str, lang_choices: Iterable[str]) -> dict[str, bool | str
     parser.add_argument(
         "-r",
         "--reverse",
-        help="Reverse mode, where all special characters are simply replaced"
+        help="Reverse mode, where all native characters are simply replaced"
         " by their alternative spellings.",
         action="store_true",
     )

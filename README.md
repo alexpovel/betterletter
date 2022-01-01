@@ -4,7 +4,7 @@ In a given text, replaces alternative spellings of native characters with their 
 
 For example, German native characters and their corresponding alternative spellings (e.g. when no proper keyboard layout is at hand, or ASCII is used) are:
 
-| Native Character | Alternative Spelling |
+| Native Character  | Alternative Spelling |
 | :---------------: | :------------------: |
 |        Ä/ä        |        Ae/ae         |
 |        Ö/ö        |        Oe/oe         |
