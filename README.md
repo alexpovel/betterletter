@@ -147,6 +147,10 @@ This allows us, after `poetry install`, to simply run:
 poetry run pytest
 ```
 
+## Special Features
+
+Fully typed, passing `mypy --strict`, and has a passing test suite based on `pytest`.
+
 ## AutoHotKey
 
 This tool can be integrated with [AutoHotKey](https://www.autohotkey.com/), allowing you to use it at the touch of a button.
