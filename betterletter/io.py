@@ -54,7 +54,8 @@ def get_dictionary(
         items = read(file)
         logger.debug("Found pre-processed list.")
     except FileNotFoundError:
-        logger.debug("No pre-processed list found, creating from original.")
+        logger.warning("No pre-processed dictionary found, creating from original.")
+        logger.warning("This only needs to be done once after package installation.")
         fallback = base_path / base_file
         items = read(fallback)
         logger.debug(f"Fetched unprocessed list.")
