@@ -179,6 +179,19 @@ def backward(
         lower, upper = native.lower(), native.upper()
         table[lower] = alt.lower()
         table[upper] = alt.capitalize()
-    # str.translate requires 'ordinals: string' mappings, not just 'string: string'
+
+    # In the case of German, `"ß".upper()` will yield "SS" instead of "ẞ". However,
+    # for `str.translate`, the table keys need to be of length one. Hence, correct
+    # Python's Unicode replacement before proceeding.
+    corrections = {
+        "SS": "ẞ",
+    }
+    for original, correction in corrections.items():
+        try:
+            table[correction] = table.pop(original)
+        except KeyError:  # If this changes in the future, allow failure here.
+            pass
+
+    # `str.translate` requires 'ordinals: string' mappings, not just 'string: string'
     trans = str.maketrans(table)
     return text.translate(trans)
