@@ -149,40 +149,7 @@ poetry install
 
 and then accessed through either `poetry run <command>` or `poetry shell`.
 
-### Tests
-
-The testing framework is installed as a development dependency.
-This allows us, after `poetry install`, to simply run:
-
-```bash
-make tests
-```
-
-### Type-checking
-
-The project is fully typed and passes strict checking:
-
-```bash
-make checks
-```
-
-Configure your IDE to do this on every save.
-
-### Profiling
-
-Using [snakeviz](https://jiffyclub.github.io/snakeviz/):
-
-```bash
-make profile
-```
-
-### Formatting
-
-```bash
-make formatting
-```
-
-Better way: configure your IDE to format on saving.
+Run `make` (without arguments) for more available commands.
 
 ## AutoHotKey
 
