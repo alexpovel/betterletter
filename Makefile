@@ -35,6 +35,10 @@ all: tests checks
 venv:  ## Install the virtual environment.
 	@poetry install
 
+release:  # Builds, then publishes the package on PyPI.
+	@poetry build
+	@poetry publish
+
 tests:  ## Run all tests.
 	@echo "Running tests."
 	@$(RUN) pytest

@@ -5,6 +5,8 @@
 For example, this problem occurs when no proper keyboard layout was available.
 
 This program is dictionary-based to check if replacements are valid words.
+
+By default, reads from STDIN and writes to STDOUT.
 """
 
 import argparse
