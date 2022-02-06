@@ -17,6 +17,9 @@ mypy = "^0.930"
 pytest = "^6.2.5"
 snakeviz = "^2.1.1"
 
+[tool.poetry.scripts]
+betterletter = "betterletter.__main__:main"
+
 [tool.mypy]
 strict = true
 exclude = "tests/*"
