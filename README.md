@@ -90,11 +90,85 @@ Turning substitutions like these off would mean the tool would no longer emit *B
 This could be as undesirable as the current behaviour.
 There seems to be no easy resolve.
 
-## Running
+## Installation
+
+```shell
+pip install betterletter
+```
+
+## Usage
+
+The package will install a Python script of the same name, so instead of `python -m betterletter`, you can simply invoke that directly, if the Python script directory is on your `$PATH`:
+
+```bash
+$ betterletter -h
+usage: betterletter [-h] [-c] [-f] [-r] [-g] [-d] [--debug] {de}
+
+Tool to replace alternative spellings of native characters (e.g. German umlauts [ä, ö, ü] etc. [ß]) with the proper native characters. For example, this
+problem occurs when no proper keyboard layout was available. This program is dictionary-based to check if replacements are valid words. By default, reads
+from STDIN and writes to STDOUT.
+
+positional arguments:
+  {de}             Text language to work with, in ISO 639-1 format.
+
+options:
+  -h, --help       show this help message and exit
+  -c, --clipboard  Read from and write back to clipboard instead of STDIN/STDOUT.
+  -f, --force-all  Force substitutions and return the text version with the maximum number of substitutions, even if they are illegal words (useful for
+                   names).
+  -r, --reverse    Reverse mode, where all native characters are simply replaced by their alternative spellings.
+  -g, --gui        Stop and open a GUI prompt for confirmation before finishing.
+  -d, --diff       Print a diff view of the substitutions to stderr.
+  --debug          Output detailed logging information.
+```
+
+### Usage Examples
+
+Normal usage:
+
+```bash
+$ echo "Hoeflich fragen waere angebracht!" | betterletter de
+Höflich fragen wäre angebracht!
+```
+
+Reverse it:
+
+```bash
+$ echo "Höflich fragen wäre angebracht!" | betterletter --reverse de
+Hoeflich fragen waere angebracht!
+```
+
+A diff view, useful for longer text and to confirm correctness.
+The diff is written to STDERR so won't interfere with further redirection.
+
+```bash
+$ "Hoeflich fragen waere angebracht!" | python -m betterletter --diff de
+- Hoeflich fragen waere angebracht!
+?  ^^              ^^
++ Höflich fragen wäre angebracht!
+?  ^              ^
+Höflich fragen wäre angebracht!
+```
+
+The tool may be coerced into working with names:
+
+```bash
+$ echo "Sehr geehrte Frau Huebenstetter, ..." | betterletter de  # A name won't be in the dictionary
+Sehr geehrte Frau Huebenstetter, ...
+$ echo "Sehr geehrte Frau Huebenstetter, ..." | betterletter --force de
+Sehr geehrte Frau Hübenstetter, ...
+```
+
+Clipboard-based workflows are also possible:
+
+```bash
+betterletter --clipboard de  # Nothing happens: clipboard is read and written to silently.
+```
+
+## Development
 
 ### Prerequisites
 
-Ideally, run the project (as is good, albeit annoying practice) in its own virtual environment.
 This project uses [poetry](https://python-poetry.org/) for dependency management.
 Refer to the [poetry config file](pyproject.toml) for more info (e.g. the required Python modules to install if you don't want to deal with `poetry`).
 
@@ -108,38 +182,6 @@ poetry install
 poetry run python -m betterletter -h
 ```
 
-### Usage
-
-Usage help (invoke from this project's root) will display all options:
-
-```bash
-poetry run python -m betterletter -h
-```
-
-The tool can read from STDIN (outputting to STDOUT), or work with the clipboard (overwriting its contents with a corrected version).
-This allows for example:
-
-```bash
-$ cat test.txt
-Hoeflich fragen!
-$ cat test.txt | poetry run python -m betterletter de
-Höflich fragen!
-# Reverse mode:
-$ cat test.txt | poetry run python -m betterletter de | poetry run python -m betterletter -r de
-Hoeflich fragen!
-```
-
-or
-
-```bash
-poetry run python -m betterletter -c de
-# Nothing happens: clipboard is read and written to silently.
-```
-
-After installing (see below) the package, these calls should work system-wide.
-
-## Development
-
 Development tasks are all run through `poetry`, within the context of the virtual environment.
 The latter is created through
 
@@ -149,20 +191,12 @@ poetry install
 
 and then accessed through either `poetry run <command>` or `poetry shell`.
 
-Run `make` (without arguments) for more available commands.
+Run `make` (without arguments) for more available commands related to development.
 
 ## AutoHotKey
 
 This tool can be integrated with [AutoHotKey](https://www.autohotkey.com/), allowing you to use it at the touch of a button.
 This can be used to setup a keyboard shortcut to run this tool in-place, quickly replacing what you need without leaving your text editing environment.
-
-I was unable to use `poetry` commands for this, getting
-
-> The system cannot find the file specified.
-
-It works with plain `python` invocations.
-Thanks to `SetWorkingDir`, we do *not* have to install the module system-wide.
-*However*, the requirements need to be installed and available to the plain `python` command.
 
 The AutoHotKey file is [here](betterletter.ahk).
 
