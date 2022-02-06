@@ -13,10 +13,15 @@ import argparse
 import logging
 import re
 import sys
-import tkinter as tk
-from difflib import Differ
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Iterable, Union
+
+try:
+    import tkinter as tk
+
+    _TKINTER_AVAILABLE = True
+except ImportError:
+    _TKINTER_AVAILABLE = False
 
 try:
     import pyperclip
@@ -50,7 +55,7 @@ def parse(description: str, lang_choices: Iterable[str]) -> dict[str, Union[bool
         }
     else:
         kwargs = {
-            "help": "Clipboard functionality unavailable (pyperclip not installed).",
+            "help": "OPTION IGNORED (not available): package 'pyperclip' couldn't be imported.",
             # False in all cases:
             "action": "store_false",
             "default": False,
@@ -72,12 +77,22 @@ def parse(description: str, lang_choices: Iterable[str]) -> dict[str, Union[bool
         " by their alternative spellings.",
         action="store_true",
     )
-    parser.add_argument(
-        "-g",
-        "--gui",
-        help="Stop and open a GUI prompt for confirmation before finishing.",
-        action="store_true",
-    )
+
+    if _TKINTER_AVAILABLE:
+        kwargs = {
+            "help": "Stop and open a GUI prompt for confirmation before finishing.",
+            "action": "store_true",
+        }
+    else:
+        kwargs = {
+            "help": "OPTION IGNORED (not available): package 'tkinter' couldn't be imported.",
+            # False in all cases:
+            "action": "store_false",
+            "default": False,
+        }
+
+    parser.add_argument("-g", "--gui", **kwargs)  # type: ignore
+
     parser.add_argument(
         "-d",
         "--diff",
@@ -140,6 +155,8 @@ def main() -> None:
         )
 
     if args["diff"] or args["gui"]:
+        from difflib import Differ
+
         raw_diff = Differ().compare(splitlines(in_text), splitlines(out_text))
         # See https://docs.python.org/3/library/difflib.html#difflib.Differ :
         # a 'line common to both sequences' starts with two spaces -> we don't care
