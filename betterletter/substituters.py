@@ -150,7 +150,7 @@ def forward(
                     if any(case in known_words for case in cases)
                 )
             except StopIteration:  # Not a problem, `item` remains untouched
-                logger.warning(
+                logger.info(
                     f"No dictionary entry found for any candidates in {candidate_cases}"
                 )
         logger.debug(f"Yielding fully processed {item=}")
