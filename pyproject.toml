@@ -20,6 +20,9 @@ classifiers = [
     "Typing :: Typed",
 ]
 
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/alexpovel/betterletter/issues"
+
 [tool.poetry.dependencies]
 pyperclip = "^1.8.2"
 python = "^3.9"
