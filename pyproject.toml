@@ -5,7 +5,20 @@ license = "MIT"
 name = "betterletter"
 readme = "README.md"
 repository = "https://github.com/alexpovel/betterletter/"
-version = "1.0.0"
+version = "1.0.1"
+keywords = ["spelling", "umlaut", "substitute", "letter", "alternative"]
+classifiers = [
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: English",
+    "Natural Language :: German",
+    "Operating System :: OS Independent",
+    "Topic :: Communications",
+    "Topic :: Office/Business",
+    "Topic :: Text Editors",
+    "Topic :: Text Processing",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
 
 [tool.poetry.dependencies]
 pyperclip = "^1.8.2"
