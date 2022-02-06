@@ -65,7 +65,7 @@ def parse(description: str, lang_choices: Iterable[str]) -> dict[str, Union[bool
 
     parser.add_argument(
         "-f",
-        "--force-all",
+        "--force",
         help="Force substitutions and return the text version with the maximum number"
         " of substitutions, even if they are illegal words (useful for names).",
         action="store_true",
@@ -150,7 +150,7 @@ def main() -> None:
                 text=in_text,
                 language_mapping=language_mapping,
                 known_words=known_words,
-                force=bool(args["force_all"]),
+                force=bool(args["force"]),
             )
         )
 
