@@ -1,4 +1,4 @@
-# subalt
+# betterletter
 
 In a given text, replaces alternative spellings of native characters with their proper spellings.
 
@@ -11,7 +11,7 @@ For example, German native characters and their corresponding alternative spelli
 |       Ü/ü        |        Ue/ue         |
 |       ẞ/ß        |        SS/ss         |
 
-These pairings are recorded [here](subalt/resources/languages.json).
+These pairings are recorded [here](betterletter/resources/languages.json).
 
 Going from left to right is simple: replace all native characters with their alternative spellings, minding case.
 That use case is also supported by this tool (`reverse` flag).
@@ -35,7 +35,7 @@ The other direction is much less straightforward: there exist countless words fo
 
 just to name a few, pretty common examples.
 
-As such, this tool is based on a dictionary lookup, see also the [containing directory](subalt/resources/dicts/).
+As such, this tool is based on a dictionary lookup, see also the [containing directory](betterletter/resources/dicts/).
 
 ## Examples
 
@@ -105,7 +105,7 @@ Using poetry, from the project root, run:
 # otherwise pyproject.toml:
 poetry install
 # Run command within that environment:
-poetry run python -m subalt -h
+poetry run python -m betterletter -h
 ```
 
 ### Usage
@@ -113,7 +113,7 @@ poetry run python -m subalt -h
 Usage help (invoke from this project's root) will display all options:
 
 ```bash
-poetry run python -m subalt -h
+poetry run python -m betterletter -h
 ```
 
 The tool can read from STDIN (outputting to STDOUT), or work with the clipboard (overwriting its contents with a corrected version).
@@ -122,17 +122,17 @@ This allows for example:
 ```bash
 $ cat test.txt
 Hoeflich fragen!
-$ cat test.txt | poetry run python -m subalt de
+$ cat test.txt | poetry run python -m betterletter de
 Höflich fragen!
 # Reverse mode:
-$ cat test.txt | poetry run python -m subalt de | poetry run python -m subalt -r de
+$ cat test.txt | poetry run python -m betterletter de | poetry run python -m betterletter -r de
 Hoeflich fragen!
 ```
 
 or
 
 ```bash
-poetry run python -m subalt -c de
+poetry run python -m betterletter -c de
 # Nothing happens: clipboard is read and written to silently.
 ```
 
@@ -197,6 +197,6 @@ It works with plain `python` invocations.
 Thanks to `SetWorkingDir`, we do *not* have to install the module system-wide.
 *However*, the requirements need to be installed and available to the plain `python` command.
 
-The AutoHotKey file is [here](subalt.ahk).
+The AutoHotKey file is [here](betterletter.ahk).
 
 Follow [this guide](https://www.autohotkey.com/docs/FAQ.htm#Startup) to have the script launch on boot automatically.

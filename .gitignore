@@ -1,7 +1,7 @@
 .vscode/
 
 # Not part of the repo but created on-demand:
-subalt/resources/dicts/filtered/*.txt
+betterletter/resources/dicts/filtered/*.txt
 
 # cProfile output files
 *.profile

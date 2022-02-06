@@ -4,8 +4,8 @@ from functools import partial
 from pathlib import Path
 from typing import Iterable, Optional
 
-from subalt import _RESOURCES, ISO6391Code, LanguageMapping, WordLookup
-from subalt.iteration import apply_to_all, filter_strings
+from betterletter import _RESOURCES, ISO6391Code, LanguageMapping, WordLookup
+from betterletter.iteration import apply_to_all, filter_strings
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
 from contextlib import nullcontext
 
 import pytest
-from subalt.iteration import all_lengths_combinations, filter_strings
+from betterletter.iteration import all_lengths_combinations, filter_strings
 
 
 @pytest.mark.parametrize(

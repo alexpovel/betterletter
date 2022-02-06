@@ -15,7 +15,7 @@ tests:
 
 checks:
 	@echo "Running type checks."
-	@$(RUN) mypy --package subalt
+	@$(RUN) mypy --package betterletter
 
 formatting:
 	@echo "Running formatting."
@@ -34,5 +34,5 @@ formatting:
 	@echo "Huette Kaese Schluebbeldaebbel" | \
 		$(RUN) python -m cProfile --outfile="$@" -m "$*" de
 
-profile: subalt.profile
+profile: betterletter.profile
 	@$(RUN) snakeviz "$<"

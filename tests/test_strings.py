@@ -1,7 +1,7 @@
 from contextlib import nullcontext
 
 import pytest
-from subalt.strings import cf_contains
+from betterletter.strings import cf_contains
 
 # Placeholder for parameters that do not matter in that instance of a test, e.g.
 # when an exception is raised, so no result is produced.

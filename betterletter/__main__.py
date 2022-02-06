@@ -23,9 +23,9 @@ try:
 except ImportError:
     _PYPERCLIP_AVAILABLE = False
 
-from subalt import _PACKAGE_ROOT, substituters
-from subalt.io import backup_clipboard, get_dictionary, get_language_mappings
-from subalt.iteration import splitlines
+from betterletter import _PACKAGE_ROOT, substituters
+from betterletter.io import backup_clipboard, get_dictionary, get_language_mappings
+from betterletter.iteration import splitlines
 
 logger = logging.getLogger(__name__)
 

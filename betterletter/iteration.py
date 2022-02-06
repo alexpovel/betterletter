@@ -3,8 +3,8 @@ from collections.abc import Callable
 from itertools import combinations
 from typing import Any, Iterable, Iterator, TypeVar
 
-from subalt import VERBOSE
-from subalt.strings import cf_contains
+from betterletter import VERBOSE
+from betterletter.strings import cf_contains
 
 logger = logging.getLogger(__name__)
 

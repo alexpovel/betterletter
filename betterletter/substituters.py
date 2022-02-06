@@ -2,8 +2,8 @@ import logging
 import re
 from typing import Iterator
 
-from subalt import LanguageMapping, NativeSpelling, Span, WordLookup
-from subalt.iteration import all_lengths_combinations, subset
+from betterletter import LanguageMapping, NativeSpelling, Span, WordLookup
+from betterletter.iteration import all_lengths_combinations, subset
 
 logger = logging.getLogger(__name__)
 

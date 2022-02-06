@@ -2,9 +2,9 @@
 authors = ["Alex Povel <python@alexpovel.de>"]
 description = "Substitute alternative spellings of native characters (e.g. German umlauts [ae, oe, ue] etc. [ss]) with their correct versions (ä, ö, ü, ß)."
 license = "MIT"
-name = "subalt"
+name = "betterletter"
 readme = "README.md"
-repository = "https://github.com/alexpovel/subalt/"
+repository = "https://github.com/alexpovel/betterletter/"
 version = "1.0.0"
 
 [tool.poetry.dependencies]
