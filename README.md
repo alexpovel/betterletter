@@ -11,7 +11,7 @@ For example, German native characters and their corresponding alternative spelli
 |       Ü/ü        |        Ue/ue         |
 |       ẞ/ß        |        SS/ss         |
 
-These pairings are recorded [here](betterletter/resources/languages.json).
+These pairings are recorded [here](https://github.com/alexpovel/betterletter/blob/master/betterletter/resources/languages.json).
 
 Going from left to right is simple: replace all native characters with their alternative spellings, minding case.
 That use case is also supported by this tool (`reverse` flag).
@@ -35,11 +35,11 @@ The other direction is much less straightforward: there exist countless words fo
 
 just to name a few, pretty common examples.
 
-As such, this tool is based on a dictionary lookup, see also the [containing directory](betterletter/resources/dicts/).
+As such, this tool is based on a dictionary lookup, see also the [containing directory](https://github.com/alexpovel/betterletter/blob/master/betterletter/resources/dicts/).
 
 ## Examples
 
-See also the [tests](tests/).
+See also the [tests](https://github.com/alexpovel/betterletter/blob/master/tests/).
 
 ### de
 
@@ -170,7 +170,7 @@ betterletter --clipboard de  # Nothing happens: clipboard is read and written to
 ### Prerequisites
 
 This project uses [poetry](https://python-poetry.org/) for dependency management.
-Refer to the [poetry config file](pyproject.toml) for more info (e.g. the required Python modules to install if you don't want to deal with `poetry`).
+Refer to the [poetry config file](https://github.com/alexpovel/betterletter/blob/master/pyproject.toml) for more info (e.g. the required Python modules to install if you don't want to deal with `poetry`).
 
 Using poetry, from the project root, run:
 
@@ -198,6 +198,6 @@ Run `make` (without arguments) for more available commands related to developmen
 This tool can be integrated with [AutoHotKey](https://www.autohotkey.com/), allowing you to use it at the touch of a button.
 This can be used to setup a keyboard shortcut to run this tool in-place, quickly replacing what you need without leaving your text editing environment.
 
-The AutoHotKey file is [here](betterletter.ahk).
+The AutoHotKey file is [here](https://github.com/alexpovel/betterletter/blob/master/betterletter.ahk).
 
 Follow [this guide](https://www.autohotkey.com/docs/FAQ.htm#Startup) to have the script launch on boot automatically.
