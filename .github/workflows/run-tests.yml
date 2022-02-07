@@ -19,3 +19,5 @@ jobs:
         run: poetry install
       - name: Run tests
         run: make tests
+      - name: Run type checks
+        run: make typecheck
