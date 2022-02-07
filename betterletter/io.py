@@ -1,11 +1,10 @@
 import json
 import logging
-from functools import partial
+from functools import cache, partial
 from pathlib import Path
-from typing import Iterable, Optional
 
 from betterletter import _RESOURCES, ISO6391Code, LanguageMapping, WordLookup
-from betterletter.iteration import apply_to_all, filter_strings
+from betterletter.iteration import apply_to_all
 
 logger = logging.getLogger(__name__)
 
@@ -23,44 +22,21 @@ def read(file: Path) -> list[str]:
     return lines
 
 
-def write(file: Path, lines: list[str]) -> None:
-    with open_with_encoding(file, "w") as f:
-        f.write("\n".join(lines))
-    logger.debug(f"Wrote file containing {len(lines)} lines to {file}")
-
-
-def get_dictionary(
-    language: ISO6391Code,
-    letter_filters: Optional[Iterable[str]] = None,
-) -> WordLookup:
-    """Provides words from a pre-processed file or additionally creates it if not found.
+@cache  # Somewhat heavy io, caching helps a ton for tests etc.
+def get_dictionary(language: ISO6391Code) -> WordLookup:
+    """Provides the word set from a provided dictionary file.
 
     Args:
-        file: The pre-processed, line-separated file of items.
-        fallback_file: File to use and create new file from if main file not found.
-        letter_filters: List of substrings items in the fallback file must contain to
-            be returned and written to a new, processed file.
+        language: The dictionary of this language will be loaded.
 
     Returns:
-        Collection of words from the read pre-preprocessed file.
+        Set of words from the file.
     """
-    base_path = _RESOURCES / Path("dicts")
-    base_file = Path(language).with_suffix(".txt")
-    file = base_path / Path("filtered") / base_file
+    path = _RESOURCES / Path("dicts")
+    file = Path(language).with_suffix(".txt")
 
-    if letter_filters is None:
-        letter_filters = []
-    try:
-        items = read(file)
-        logger.debug("Found pre-processed list.")
-    except FileNotFoundError:
-        logger.warning("No pre-processed dictionary found, creating from original.")
-        logger.warning("This only needs to be done once after package installation.")
-        fallback = base_path / base_file
-        items = read(fallback)
-        logger.debug(f"Fetched unprocessed list.")
-        items = list(filter_strings(items, letter_filters))
-        write(file, items)
+    items = read(path / file)
+    logger.debug("Fetched word list.")
     return set(items)
 
 
@@ -70,6 +46,7 @@ def backup_clipboard(text: str, file: Path) -> None:
         f.write(text)
 
 
+@cache
 def get_language_mappings() -> dict[ISO6391Code, LanguageMapping]:
     with open_with_encoding((_RESOURCES / "languages").with_suffix(".json")) as f:
         # Enforce lowercase so we can rely on it later on. Do not use `casefold` on keys,

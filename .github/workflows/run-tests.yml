@@ -1,7 +1,8 @@
+name: "Tests"
 on: push
 
 jobs:
-  tests:
+  run:
     strategy:
       matrix:
         python-version: ["3.9", "3.10"]
