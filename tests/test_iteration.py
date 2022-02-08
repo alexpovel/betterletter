@@ -1,7 +1,7 @@
 from contextlib import nullcontext
 
 import pytest
-from betterletter.iteration import all_lengths_combinations, filter_strings
+from betterletter.iteration import all_lengths_combinations, filter_strings, splitlines
 
 
 @pytest.mark.parametrize(
@@ -115,3 +115,18 @@ def test_filter_strings(strings, letter_filters, result, expectation):
 def test_all_lengths_combinations(iterable, result, expectation):
     with expectation:
         assert list(all_lengths_combinations(iterable)) == result
+
+
+@pytest.mark.parametrize(
+    ["string", "result", "expectation"],
+    [
+        ("", [], nullcontext()),
+        ("\n", ["\n"], nullcontext()),
+        ("\n\n", ["\n", "\n"], nullcontext()),
+        ("Hello\n", ["Hello\n"], nullcontext()),
+        ("Hello\nWorld!", ["Hello\n", "World!\n"], nullcontext()),
+    ],
+)
+def test_splitlines(string, result, expectation):
+    with expectation:
+        assert list(splitlines(string)) == result
