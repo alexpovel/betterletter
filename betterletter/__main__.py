@@ -136,10 +136,7 @@ def main() -> None:
         out_text = substituters.backward(in_text, language_mapping)
     else:
         try:
-            known_words = get_dictionary(
-                language=language,
-                letter_filters=language_mapping.keys(),
-            )
+            known_words = get_dictionary(language=language)
         except FileNotFoundError as e:
             raise FileNotFoundError(
                 f"Dictionary for {language=} not available (looked for '{e.filename}')"
