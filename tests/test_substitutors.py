@@ -96,6 +96,106 @@ def german_language_mapping():
     return get_language_mappings()["de"]
 
 
+_COMMON_ARGS = [
+    ("Uebel", False, "Übel", nullcontext()),
+    ("uebel", False, "übel", nullcontext()),
+    ("Busse", False, "Buße", nullcontext()),
+    ("busse", False, "busse", nullcontext()),
+    ("Gruss", False, "Gruß", nullcontext()),
+    ("gruss", False, "gruss", nullcontext()),
+    ("gruesse", False, "grüße", nullcontext()),
+    ("Apfel", False, "Apfel", nullcontext()),
+    ("apfel", False, "apfel", nullcontext()),
+    ("Aepfel", False, "Äpfel", nullcontext()),
+    (
+        "Ueberhaupt braeuchte es mal einen Teststring.",
+        False,
+        "Überhaupt bräuchte es mal einen Teststring.",
+        nullcontext(),
+    ),
+    (
+        "Saetze ohne Bedeutung, aber mit vielen Umlauten.",
+        False,
+        "Sätze ohne Bedeutung, aber mit vielen Umlauten.",
+        nullcontext(),
+    ),
+    (
+        "DRPFA-Angehoerige gehoeren haeufig nicht dazu.",
+        False,
+        "DRPFA-Angehörige gehören häufig nicht dazu.",
+        nullcontext(),
+    ),
+    (
+        "Bindestrich-Woerter spraechen Baende ueber Fehler.",
+        False,
+        "Bindestrich-Wörter sprächen Bände über Fehler.",
+        nullcontext(),
+    ),
+    (
+        "Doppelgaenger-Doppelgaenger sind doppelt droelfzig.",
+        False,
+        "Doppelgänger-Doppelgänger sind doppelt droelfzig.",
+        nullcontext(),
+    ),
+    (
+        "Oder Uemlaeuten? Auslaeuten? Leute gaebe es, wuerde man meinen.",
+        False,
+        "Oder Uemlaeuten? Auslaeuten? Leute gäbe es, würde man meinen.",
+        nullcontext(),
+    ),
+    (
+        "Ueble Nachrede ist naechtens nicht erlaubt.",
+        False,
+        "Üble Nachrede ist nächtens nicht erlaubt.",
+        nullcontext(),
+    ),
+    (
+        "Erlaube man dieses, waere es schoen uebertrieben.",
+        False,
+        "Erlaube man dieses, wäre es schön übertrieben.",
+        nullcontext(),
+    ),
+    (
+        "Busse muesste geloest werden, bevor Gruesse zum Gruss kommen.",
+        False,
+        "Buße müsste gelöst werden, bevor Grüße zum Gruß kommen.",
+        nullcontext(),
+    ),
+    (
+        "Busse sind Geraete, die womoeglich schnell fuehren.",
+        False,
+        "Buße sind Geräte, die womöglich schnell führen.",
+        nullcontext(),
+    ),
+    ("Voegel sind aehnlich zu Oel.", False, "Vögel sind ähnlich zu Öl.", nullcontext()),
+    (
+        "Hierfuer ist fuer den droegen Poebel zu beachten, dass Anmassungen"
+        " zu Gehoerverlust fuehren koennen.",
+        False,
+        "Hierfür ist für den drögen Pöbel zu beachten, dass Anmaßungen"
+        " zu Gehörverlust führen können.",
+        nullcontext(),
+    ),
+    ("Stroemelschnoesseldaemel", False, "Stroemelschnoesseldaemel", nullcontext()),
+    # `force=True`
+    ("Stroemelschnoesseldaemel", True, "Strömelschnößeldämel", nullcontext()),
+    ("ae", True, "ä", nullcontext()),
+    ("Ae", True, "Ä", nullcontext()),
+    ("oe", True, "ö", nullcontext()),
+    ("Oe", True, "Ö", nullcontext()),
+    ("ue", True, "ü", nullcontext()),
+    ("Ue", True, "Ü", nullcontext()),
+    ("ss", True, "ß", nullcontext()),
+    #
+    (
+        "Ueberhaupt braeuchte es mal einen Teststring. Saetze ohne Bedeutung, aber mit vielen Umlauten. DRPFA-Angehoerige gehoeren haeufig nicht dazu. Bindestrich-Woerter spraechen Baende ueber Fehler. Doppelgaenger-Doppelgaenger sind doppelt droelfzig. Oder Uemlaeuten? Auslaeuten? Leute gaebe es, wuerde man meinen. Ueble Nachrede ist naechtens nicht erlaubt. Erlaube man dieses, waere es schoen uebertrieben. Busse muesste geloest werden, bevor Gruesse zum Gruss kommen. Busse sind Geraete, die womoeglich schnell fuehren. Voegel sind aehnlich zu Oel. Hierfuer ist fuer den droegen Poebel zu beachten, dass Anmassungen zu Gehoerverlust fuehren koennen. Stroemelschnoesseldaemel!",
+        False,
+        "Überhaupt bräuchte es mal einen Teststring. Sätze ohne Bedeutung, aber mit vielen Umlauten. DRPFA-Angehörige gehören häufig nicht dazu. Bindestrich-Wörter sprächen Bände über Fehler. Doppelgänger-Doppelgänger sind doppelt droelfzig. Oder Uemlaeuten? Auslaeuten? Leute gäbe es, würde man meinen. Üble Nachrede ist nächtens nicht erlaubt. Erlaube man dieses, wäre es schön übertrieben. Buße müsste gelöst werden, bevor Grüße zum Gruß kommen. Buße sind Geräte, die womöglich schnell führen. Vögel sind ähnlich zu Öl. Hierfür ist für den drögen Pöbel zu beachten, dass Anmaßungen zu Gehörverlust führen können. Stroemelschnoesseldaemel!",
+        nullcontext(),
+    ),
+]
+
+
 class TestForward:
     @pytest.mark.parametrize(
         [
@@ -104,186 +204,16 @@ class TestForward:
             "result",
             "expectation",
         ],
-        [
-            ("Uebel", False, "Übel", nullcontext()),
-            ("uebel", False, "übel", nullcontext()),
-            ("Busse", False, "Buße", nullcontext()),
-            ("busse", False, "busse", nullcontext()),
-            ("Gruss", False, "Gruß", nullcontext()),
+        _COMMON_ARGS
+        + [
             ("Grüße", False, "Grüße", nullcontext()),
-            ("gruss", False, "gruss", nullcontext()),
             ("grüße", False, "grüße", nullcontext()),
-            ("gruesse", False, "grüße", nullcontext()),
-            ("Apfel", False, "Apfel", nullcontext()),
-            ("apfel", False, "apfel", nullcontext()),
-            ("Aepfel", False, "Äpfel", nullcontext()),
             ("AEPFEL", False, "ÄPFEL", nullcontext()),
-            (
-                "Ueberhaupt braeuchte es mal einen Teststring.",
-                False,
-                "Überhaupt bräuchte es mal einen Teststring.",
-                nullcontext(),
-            ),
-            (
-                "Saetze ohne Bedeutung, aber mit vielen Umlauten.",
-                False,
-                "Sätze ohne Bedeutung, aber mit vielen Umlauten.",
-                nullcontext(),
-            ),
-            (
-                "DRPFA-Angehoerige gehoeren haeufig nicht dazu.",
-                False,
-                "DRPFA-Angehörige gehören häufig nicht dazu.",
-                nullcontext(),
-            ),
-            (
-                "Bindestrich-Woerter spraechen Baende ueber Fehler.",
-                False,
-                "Bindestrich-Wörter sprächen Bände über Fehler.",
-                nullcontext(),
-            ),
-            (
-                "Doppelgaenger-Doppelgaenger sind doppelt droelfzig.",
-                False,
-                "Doppelgänger-Doppelgänger sind doppelt droelfzig.",
-                nullcontext(),
-            ),
-            (
-                "Oder Uemlaeuten? Auslaeuten? Leute gaebe es, wuerde man meinen.",
-                False,
-                "Oder Uemlaeuten? Auslaeuten? Leute gäbe es, würde man meinen.",
-                nullcontext(),
-            ),
-            (
-                "Ueble Nachrede ist naechtens nicht erlaubt.",
-                False,
-                "Üble Nachrede ist nächtens nicht erlaubt.",
-                nullcontext(),
-            ),
-            (
-                "Erlaube man dieses, waere es schoen uebertrieben.",
-                False,
-                "Erlaube man dieses, wäre es schön übertrieben.",
-                nullcontext(),
-            ),
-            (
-                "Busse muesste geloest werden, bevor Gruesse zum Gruss kommen.",
-                False,
-                "Buße müsste gelöst werden, bevor Grüße zum Gruß kommen.",
-                nullcontext(),
-            ),
-            (
-                "Busse sind Geraete, die womoeglich schnell fuehren.",
-                False,
-                "Buße sind Geräte, die womöglich schnell führen.",
-                nullcontext(),
-            ),
-            (
-                "Voegel sind aehnlich zu Oel.",
-                False,
-                "Vögel sind ähnlich zu Öl.",
-                nullcontext(),
-            ),
-            (
-                "Hierfuer ist fuer den droegen Poebel zu beachten, dass Anmassungen"
-                " zu Gehoerverlust fuehren koennen.",
-                False,
-                "Hierfür ist für den drögen Pöbel zu beachten, dass Anmaßungen"
-                " zu Gehörverlust führen können.",
-                nullcontext(),
-            ),
-            (
-                "Stroemelschnoesseldaemel",
-                False,
-                "Stroemelschnoesseldaemel",
-                nullcontext(),
-            ),
-            # `force=True`
-            (
-                "Stroemelschnoesseldaemel",
-                True,
-                "Strömelschnößeldämel",
-                nullcontext(),
-            ),
-            (
-                "ae",
-                True,
-                "ä",
-                nullcontext(),
-            ),
-            (
-                "Ae",
-                True,
-                "Ä",
-                nullcontext(),
-            ),
-            (
-                "AE",
-                True,
-                "Ä",
-                nullcontext(),
-            ),
-            (
-                "oe",
-                True,
-                "ö",
-                nullcontext(),
-            ),
-            (
-                "Oe",
-                True,
-                "Ö",
-                nullcontext(),
-            ),
-            (
-                "OE",
-                True,
-                "Ö",
-                nullcontext(),
-            ),
-            (
-                "ue",
-                True,
-                "ü",
-                nullcontext(),
-            ),
-            (
-                "Ue",
-                True,
-                "Ü",
-                nullcontext(),
-            ),
-            (
-                "UE",
-                True,
-                "Ü",
-                nullcontext(),
-            ),
-            (
-                "ss",
-                True,
-                "ß",
-                nullcontext(),
-            ),
-            (
-                "Ss",
-                True,
-                "SS",
-                nullcontext(),
-            ),
-            (
-                "SS",
-                True,
-                "SS",
-                nullcontext(),
-            ),
-            #
-            (
-                "Ueberhaupt braeuchte es mal einen Teststring. Saetze ohne Bedeutung, aber mit vielen Umlauten. DRPFA-Angehoerige gehoeren haeufig nicht dazu. Bindestrich-Woerter spraechen Baende ueber Fehler. Doppelgaenger-Doppelgaenger sind doppelt droelfzig. Oder Uemlaeuten? Auslaeuten? Leute gaebe es, wuerde man meinen. Ueble Nachrede ist naechtens nicht erlaubt. Erlaube man dieses, waere es schoen uebertrieben. Busse muesste geloest werden, bevor Gruesse zum Gruss kommen. Busse sind Geraete, die womoeglich schnell fuehren. Voegel sind aehnlich zu Oel. Hierfuer ist fuer den droegen Poebel zu beachten, dass Anmassungen zu Gehoerverlust fuehren koennen. Stroemelschnoesseldaemel!",
-                False,
-                "Überhaupt bräuchte es mal einen Teststring. Sätze ohne Bedeutung, aber mit vielen Umlauten. DRPFA-Angehörige gehören häufig nicht dazu. Bindestrich-Wörter sprächen Bände über Fehler. Doppelgänger-Doppelgänger sind doppelt droelfzig. Oder Uemlaeuten? Auslaeuten? Leute gäbe es, würde man meinen. Üble Nachrede ist nächtens nicht erlaubt. Erlaube man dieses, wäre es schön übertrieben. Buße müsste gelöst werden, bevor Grüße zum Gruß kommen. Buße sind Geräte, die womöglich schnell führen. Vögel sind ähnlich zu Öl. Hierfür ist für den drögen Pöbel zu beachten, dass Anmaßungen zu Gehörverlust führen können. Stroemelschnoesseldaemel!",
-                nullcontext(),
-            ),
+            ("AE", True, "Ä", nullcontext()),
+            ("OE", True, "Ö", nullcontext()),
+            ("UE", True, "Ü", nullcontext()),
+            ("Ss", True, "SS", nullcontext()),
+            ("SS", True, "SS", nullcontext()),
         ],
     )
     def test_german(
@@ -294,3 +224,18 @@ class TestForward:
                 "".join(forward(text, german_language_mapping, german_words, force))
                 == result
             )
+
+
+class TestBackward:
+    @pytest.mark.parametrize(
+        [
+            "result",
+            "force",
+            "text",
+            "expectation",
+        ],
+        _COMMON_ARGS,
+    )
+    def test_german(self, result, force, text, expectation, german_language_mapping):
+        with expectation:
+            assert "".join(backward(text, german_language_mapping)) == result
