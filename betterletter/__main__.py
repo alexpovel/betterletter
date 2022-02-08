@@ -13,7 +13,6 @@ import argparse
 import logging
 import re
 import sys
-from pathlib import Path
 from typing import TYPE_CHECKING, Any, Iterable, Union
 
 try:
@@ -30,8 +29,8 @@ try:
 except ImportError:
     _PYPERCLIP_AVAILABLE = False
 
-from betterletter import _PACKAGE_ROOT, substituters
-from betterletter.io import backup_clipboard, get_dictionary, get_language_mappings
+from betterletter import substituters
+from betterletter.io import get_dictionary, get_language_mappings
 from betterletter.iteration import splitlines
 
 logger = logging.getLogger(__name__)
@@ -123,7 +122,6 @@ def main() -> None:
 
     if use_clipboard:
         in_text = pyperclip.paste()
-        backup_clipboard(in_text, file=_PACKAGE_ROOT / Path(".clip.bak"))
         possible_empty_reason = "clipboard empty or binary (document, image, ...)"
     else:
         in_text = sys.stdin.read()

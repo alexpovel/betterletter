@@ -40,12 +40,6 @@ def get_dictionary(language: ISO6391Code) -> WordLookup:
     return set(items)
 
 
-def backup_clipboard(text: str, file: Path) -> None:
-    """Writes text content to file for backup purposes."""
-    with open_with_encoding(file, "w") as f:
-        f.write(text)
-
-
 @cache
 def get_language_mappings() -> dict[ISO6391Code, LanguageMapping]:
     with open_with_encoding((_RESOURCES / "languages").with_suffix(".json")) as f:
