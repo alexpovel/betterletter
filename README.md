@@ -192,13 +192,6 @@ poetry run python -m betterletter -h
 ```
 
 Development tasks are all run through `poetry`, within the context of the virtual environment.
-The latter is created through
-
-```bash
-poetry install
-```
-
-and then accessed through either `poetry run <command>` or `poetry shell`.
 
 Run `make` (without arguments) for more available commands related to development.
 
