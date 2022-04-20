@@ -1,10 +1,12 @@
 # betterletter
 
-In a given text, replaces alternative spellings of native characters with their proper spellings.
+In a given text, replaces alternative spellings of native characters with their proper spellings:
 
 ![demo](docs/images/demo.gif)
 
-(In the above demo, `Ctrl + C` and `Ctrl + V` are inserted automatically using the [AutoHotKey script](#autohotkey)).
+(In this demo, `Ctrl + C` and `Ctrl + V` are inserted automatically using the [AutoHotKey script](#autohotkey).)
+
+## Background
 
 For example, German native characters and their corresponding alternative spellings (e.g. when no proper keyboard layout is at hand, or ASCII is used) are:
 
@@ -198,6 +200,15 @@ poetry run python -m betterletter -h
 Development tasks are all run through `poetry`, within the context of the virtual environment.
 
 Run `make` (without arguments) for more available commands related to development.
+
+### Notes
+
+- The delay between the `Ctrl + C` and `Ctrl + V` keystrokes in the above demo is the script actually doing its work.
+  First, the script reads in a dictionary from disk, taking constant time (*O(1)*).
+  Sadly, this takes comparatively long for short texts.
+  However, the script scales acceptably with longer inputs (regular *O(n)*).
+  Very long inputs are required for the actual processing to take longer than the initial dictionary I/O.
+  Hence, this script could run very fast if it were (re-)designed as a daemon, with the dictionary preloaded in memory.
 
 ## AutoHotKey
 
