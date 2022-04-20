@@ -2,6 +2,10 @@
 
 In a given text, replaces alternative spellings of native characters with their proper spellings.
 
+![demo](docs/images/demo.gif)
+
+(In the above demo, `Ctrl + C` and `Ctrl + V` are inserted automatically using the [AutoHotKey script](#autohotkey)).
+
 For example, German native characters and their corresponding alternative spellings (e.g. when no proper keyboard layout is at hand, or ASCII is used) are:
 
 | Native Character | Alternative Spelling |
