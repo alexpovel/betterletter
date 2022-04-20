@@ -104,20 +104,26 @@ The package will install a Python script of the same name, so instead of `python
 $ betterletter -h
 usage: betterletter [-h] [-c] [-f] [-r] [-g] [-d] [--debug] {de}
 
-Tool to replace alternative spellings of native characters (e.g. German umlauts [ä, ö, ü] etc. [ß]) with the proper native characters. For example, this
-problem occurs when no proper keyboard layout was available. This program is dictionary-based to check if replacements are valid words. By default, reads
-from STDIN and writes to STDOUT.
+Tool to replace alternative spellings of native characters (e.g. German
+umlauts [ä, ö, ü] etc. [ß]) with the proper native characters. For example,
+this problem occurs when no proper keyboard layout was available. This program
+is dictionary-based to check if replacements are valid words. By default,
+reads from STDIN and writes to STDOUT.
 
 positional arguments:
   {de}             Text language to work with, in ISO 639-1 format.
 
 options:
   -h, --help       show this help message and exit
-  -c, --clipboard  Read from and write back to clipboard instead of STDIN/STDOUT.
-  -f, --force-all  Force substitutions and return the text version with the maximum number of substitutions, even if they are illegal words (useful for
-                   names).
-  -r, --reverse    Reverse mode, where all native characters are simply replaced by their alternative spellings.
-  -g, --gui        Stop and open a GUI prompt for confirmation before finishing.
+  -c, --clipboard  Read from and write back to clipboard instead of
+                   STDIN/STDOUT.
+  -f, --force      Force substitutions and return the text version with the
+                   maximum number of substitutions, even if they are illegal
+                   words (useful for names).
+  -r, --reverse    Reverse mode, where all native characters are simply
+                   replaced by their alternative spellings.
+  -g, --gui        Stop and open a GUI prompt for confirmation before
+                   finishing.
   -d, --diff       Print a diff view of the substitutions to stderr.
   --debug          Output detailed logging information.
 ```
