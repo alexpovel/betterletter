@@ -98,7 +98,7 @@ pip install betterletter
 
 ## Usage
 
-The package will install a Python script of the same name, so instead of `python -m betterletter`, you can simply invoke that directly, if the Python script directory is on your `$PATH`:
+The package [will install a Python script of the same name](https://python-poetry.org/docs/pyproject/#scripts), so instead of the usual `python -m betterletter`, you can simply invoke that directly, if the Python script directory is on your `$PATH`:
 
 ```bash
 $ betterletter -h
@@ -145,35 +145,38 @@ Hoeflich fragen waere angebracht!
 ```
 
 A diff view, useful for longer text and to confirm correctness.
-The diff is written to STDERR so won't interfere with further redirection.
+The [diff](https://docs.python.org/3/library/difflib.html) is written to STDERR so won't interfere with further redirection.
 
 ```bash
-$ "Hoeflich fragen waere angebracht!" | python -m betterletter --diff de
+$ echo "Hoeflich fragen waere angebracht!" | betterletter --diff de 2> diff.txt
+Höflich fragen wäre angebracht!
+$ cat diff.txt
 - Hoeflich fragen waere angebracht!
 ?  ^^              ^^
 + Höflich fragen wäre angebracht!
 ?  ^              ^
-Höflich fragen wäre angebracht!
 ```
 
 The tool may be coerced into working with names:
 
 ```bash
-$ echo "Sehr geehrte Frau Huebenstetter, ..." | betterletter de  # A name won't be in the dictionary
+$ # A name won't be in the dictionary:
+$ echo "Sehr geehrte Frau Huebenstetter, ..." | betterletter de
 Sehr geehrte Frau Huebenstetter, ...
+$ # But we can force it to work:
 $ echo "Sehr geehrte Frau Huebenstetter, ..." | betterletter --force de
 Sehr geehrte Frau Hübenstetter, ...
 ```
 
-Clipboard-based workflows are also possible:
+[Clipboard-based](https://pypi.org/project/pyperclip/) workflows are also possible:
 
 ```bash
-betterletter --clipboard de  # Nothing happens: clipboard is read and written to silently.
+# Nothing happens: clipboard is read and written to silently.
+# Paste the processed version from your clipboard.
+$ betterletter --clipboard de
 ```
 
 ## Development
-
-### Prerequisites
 
 This project uses [poetry](https://python-poetry.org/) for dependency management.
 Refer to the [poetry config file](https://github.com/alexpovel/betterletter/blob/master/pyproject.toml) for more info (e.g. the required Python modules to install if you don't want to deal with `poetry`).
