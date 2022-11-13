@@ -1,10 +1,8 @@
 # betterletter
 
-In a given text, replaces alternative spellings of native characters with their proper spellings:
+In a given text, replaces alternative spellings of native characters with their proper spellings[^1]:
 
 ![demo](docs/images/demo.gif)
-
-(In this demo, `Ctrl + C` and `Ctrl + V` are inserted automatically using the [AutoHotKey script](#autohotkey).)
 
 ## Background
 
@@ -201,15 +199,6 @@ Development tasks are all run through `poetry`, within the context of the virtua
 
 Run `make` (without arguments) for more available commands related to development.
 
-### Notes
-
-- The delay between the `Ctrl + C` and `Ctrl + V` keystrokes in the above demo is the script actually doing its work.
-  First, the script reads in a dictionary from disk, taking constant time (*O(1)*).
-  Sadly, this takes comparatively long for short texts.
-  However, the script scales acceptably with longer inputs (regular *O(n)*).
-  Very long inputs are required for the actual processing to take longer than the initial dictionary I/O.
-  Hence, this script could run very fast if it were (re-)designed as a daemon, with the dictionary preloaded in memory.
-
 ## AutoHotKey
 
 This tool can be integrated with [AutoHotKey](https://www.autohotkey.com/), allowing you to use it at the touch of a button.
@@ -218,3 +207,13 @@ This can be used to setup a keyboard shortcut to run this tool in-place, quickly
 The AutoHotKey file is [here](https://github.com/alexpovel/betterletter/blob/master/betterletter.ahk).
 
 Follow [this guide](https://www.autohotkey.com/docs/FAQ.htm#Startup) to have the script launch on boot automatically.
+
+[^1]: In this demo, `Ctrl + C` and `Ctrl + V` are inserted automatically using the [AutoHotKey script](#autohotkey).
+  The user only selects the desired text and presses the hotkey, amounting to two keystrokes.
+
+  The delay between the `Ctrl + C` and `Ctrl + V` keystrokes in the above demo is the script actually doing its work.
+  First, the script reads in a dictionary from disk, taking constant time (*O(1)*), aka it doesn't scale with input size, just dictionary size.
+  Sadly, this takes comparatively long for short texts.
+  However, the script scales acceptably with longer inputs (regular *O(n)*).
+  **Very long inputs are required for the actual processing to take longer than the initial dictionary I/O.**
+  Hence, this script could run very fast if it were (re-)designed as a daemon, with the dictionary preloaded in memory.
