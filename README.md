@@ -210,7 +210,6 @@ Follow [this guide](https://www.autohotkey.com/docs/FAQ.htm#Startup) to have the
 
 [^1]: In this demo, `Ctrl + C` and `Ctrl + V` are inserted automatically using the [AutoHotKey script](#autohotkey).
   The user only selects the desired text and presses the hotkey, amounting to two keystrokes.
-
   The delay between the `Ctrl + C` and `Ctrl + V` keystrokes in the above demo is the script actually doing its work.
   First, the script reads in a dictionary from disk, taking constant time (*O(1)*), aka it doesn't scale with input size, just dictionary size.
   Sadly, this takes comparatively long for short texts.
