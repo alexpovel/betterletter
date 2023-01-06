@@ -208,6 +208,8 @@ The AutoHotKey file is [here](https://github.com/alexpovel/betterletter/blob/mas
 
 Follow [this guide](https://www.autohotkey.com/docs/FAQ.htm#Startup) to have the script launch on boot automatically.
 
+[AHK try icon](icon.ico) generated using <https://favicon.io/favicon-generator/>.
+
 [^1]: In this demo, `Ctrl + C` and `Ctrl + V` are inserted automatically using the [AutoHotKey script](#autohotkey).
   The user only selects the desired text and presses the hotkey, amounting to two keystrokes.
   The delay between the `Ctrl + C` and `Ctrl + V` keystrokes in the above demo is the script actually doing its work.
