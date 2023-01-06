@@ -204,9 +204,11 @@ Run `make` (without arguments) for more available commands related to developmen
 This tool can be integrated with [AutoHotKey](https://www.autohotkey.com/), allowing you to use it at the touch of a button.
 This can be used to setup a keyboard shortcut to run this tool in-place, quickly replacing what you need without leaving your text editing environment.
 
-The AutoHotKey file is [here](https://github.com/alexpovel/betterletter/blob/master/betterletter.ahk).
+The AutoHotKey file is [here](https://github.com/alexpovel/betterletter/blob/master/betterletter.ahk) and **requires [AutoHotKey v2](https://www.autohotkey.com/v2/)** (check out commits 7dd68f9 and earlier for the AHK v1.1 script).
 
 Follow [this guide](https://www.autohotkey.com/docs/FAQ.htm#Startup) to have the script launch on boot automatically.
+
+[AHK try icon](icon.ico) generated using <https://favicon.io/favicon-generator/>.
 
 [^1]: In this demo, `Ctrl + C` and `Ctrl + V` are inserted automatically using the [AutoHotKey script](#autohotkey).
   The user only selects the desired text and presses the hotkey, amounting to two keystrokes.
