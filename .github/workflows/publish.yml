@@ -3,22 +3,111 @@
 name: "Publish to PyPI"
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
+  tests:
+    name: Run tests
+
+    strategy:
+      matrix:
+        python-version:
+          - "3.10"
+          - "3.11"
+        os:
+          - "ubuntu-latest"
+          - "macos-latest"
+          - "windows-latest"
+
+    runs-on: ${{ matrix.os }}
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+
+      # Installing via `pipx` is 'fully supported', so no need for
+      # https://github.com/snok/install-poetry, which is a bit slower. See also
+      # https://python-poetry.org/docs/master/#installing-with-pipx
       - name: Install Poetry
-        uses: snok/install-poetry@v1.3.0
+        run: pipx install poetry
+
+        # Counterintuitively, the Python setup step itself is setup *after* installing
+        # `poetry`, else the `poetry` command isn't found and the setup step fails. See
+        # also:
+        # https://github.com/marketplace/actions/setup-python#caching-packages-dependencies
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: poetry
+
+      - name: Set up Python environment
+        # `poetry env use` instructs all `poetry` runs to go through the correct (NOT
+        # the default aka system) Python environment, see also:
+        # https://github.com/actions/setup-python/issues/374#issuecomment-1088938718
+        # As long as we then call all actions via `poetry run ...`, we're fine.
+        run: |
+          poetry env use ${{ matrix.python-version }}
+          poetry install
+      - name: Run tests
+        run: make tests
+
+      - name: Run type checks
+        run: make typecheck
+
+      - name: Check code formatting
+        run: make formatcheck
+
+      - name: Check imports formatting
+        run: make isortcheck
+
+  release-please:
+    name: Execute release chores
+
+    runs-on: ubuntu-latest
+    needs: tests
+
+    outputs:
+      created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          release-type: python
+          package-name: betterletter
+
+  publish:
+    name: Publish to PyPI
+
+    runs-on: ubuntu-latest
+    needs: release-please
+    if: ${{ needs.release-please.outputs.created }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: poetry
+
+      - name: Set up Python environment
+        run: |
+          poetry env use 3.10
+          poetry install
       - name: Build package
         run: poetry build
+
       - name: Publish package
-        uses: pypa/gh-action-pypi-publish@v1.5.0
+        uses: pypa/gh-action-pypi-publish@v1.6.4
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
