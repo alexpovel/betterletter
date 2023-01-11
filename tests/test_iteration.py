@@ -1,6 +1,7 @@
 from contextlib import nullcontext
 
 import pytest
+
 from betterletter.iteration import all_lengths_combinations, filter_strings, splitlines
 
 

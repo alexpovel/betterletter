@@ -1,6 +1,7 @@
 from contextlib import nullcontext
 
 import pytest
+
 from betterletter.io import get_dictionary, get_language_mappings
 from betterletter.substituters import _substitute_spans, backward, forward
 

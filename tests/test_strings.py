@@ -1,6 +1,7 @@
 from contextlib import nullcontext
 
 import pytest
+
 from betterletter.strings import cf_contains
 
 # Placeholder for parameters that do not matter in that instance of a test, e.g.
