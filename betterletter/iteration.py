@@ -98,6 +98,6 @@ def splitlines(string: str) -> list[str]:
 
 def apply_to_all(dictionary: dict[Any, Any], func: Callable[[Any], Any]) -> Any:
     """Recursively apply a callable to all elements (keys + values) of a dictionary."""
-    if type(dictionary) != dict:
-        return func(dictionary)
-    return {func(k): apply_to_all(v, func) for k, v in dictionary.items()}
+    if isinstance(dictionary, dict):
+        return {func(k): apply_to_all(v, func) for k, v in dictionary.items()}
+    return func(dictionary)
