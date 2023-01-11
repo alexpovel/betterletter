@@ -1,3 +1,4 @@
+import os
 import sys
 from io import StringIO
 
@@ -113,6 +114,9 @@ def test_diff_cli(
     assert output.err == expected_stderr
 
 
+@pytest.mark.skipif(
+    os.environ.get("CI", "Nope").lower() == "true", reason="No clipboard in CI."
+)
 @pytest.mark.parametrize(
     ["language", "flags", "input", "expected"],
     [
