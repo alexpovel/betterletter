@@ -47,6 +47,13 @@ tests:  ## Run all tests.
 		--cov-report=term \
 		--cov-report=xml
 
+hooks-prerequisite:
+	@python -m pip install --user pre-commit
+
+# Hooks need to be added here manually if other 'types' are later added:
+hooks:
+	@pre-commit install --hook-type pre-push --hook-type pre-commit --hook-type commit-msg
+
 formatcheck:
 	${RUN} black --check --diff ${LIBRARY}
 
