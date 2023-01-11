@@ -81,7 +81,9 @@ def forward(
         for native, alternative in language_mapping.items()
     }
 
-    items = re.split(r"(\w+)", text)  # Can be words and non-words ("!", "-", ...)
+    # Can be words and non-words ("!", "-", ...); `\w` doesn't work, underscore needs to
+    # be split on as well.
+    items = re.split(r"([a-zA-Z0-9]+)", text)
 
     for item in items:
         logger.debug(f"Processing {item=}")
