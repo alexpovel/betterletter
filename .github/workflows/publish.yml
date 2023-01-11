@@ -1,6 +1,4 @@
-# From https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
-
-name: "Publish to PyPI"
+name: Build, test (and publish)
 
 on:
   push:
