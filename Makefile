@@ -29,6 +29,7 @@ help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 RUN = poetry run
+LIBRARY = betterletter
 
 all: tests checks
 
@@ -40,12 +41,21 @@ release:  ## Builds, then publishes the package on PyPI.
 	@poetry publish
 
 tests:  ## Run all tests.
-	@echo "Running tests."
-	@$(RUN) pytest
+	${RUN} pytest \
+		--cov=${LIBRARY} \
+		--cov-report=html \
+		--cov-report=term \
+		--cov-report=xml
+
+formatcheck:
+	${RUN} black --check --diff ${LIBRARY}
+
+isortcheck:
+	${RUN} isort . --check --diff
 
 typecheck:  ## Run type checks.
 	@echo "Running type checks."
-	@$(RUN) mypy --package betterletter
+	@$(RUN) mypy --package ${LIBRARY}
 
 formatting:  ## Run formatting.
 	@echo "Running formatting."
