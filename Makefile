@@ -45,7 +45,8 @@ tests:  ## Run all tests.
 		--cov=${LIBRARY} \
 		--cov-report=html \
 		--cov-report=term \
-		--cov-report=xml
+		--cov-report=xml \
+		--capture=sys
 
 hooks-prerequisite:
 	@python -m pip install --user pre-commit

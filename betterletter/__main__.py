@@ -13,7 +13,7 @@ import argparse
 import logging
 import re
 import sys
-from typing import TYPE_CHECKING, Any, Iterable, Union
+from typing import TYPE_CHECKING, Any, Iterable, Optional, Union
 
 try:
     import tkinter as tk
@@ -36,7 +36,9 @@ from betterletter.iteration import splitlines
 logger = logging.getLogger(__name__)
 
 
-def parse(description: str, lang_choices: Iterable[str]) -> dict[str, Union[bool, str]]:
+def parse(
+    args: Optional[list[str]], description: str, lang_choices: Iterable[str]
+) -> dict[str, Union[bool, str]]:
     """Prepares, runs and returns parsing of CLI arguments for the script."""
     parser = argparse.ArgumentParser(description=description)
 
@@ -103,13 +105,15 @@ def parse(description: str, lang_choices: Iterable[str]) -> dict[str, Union[bool
         help="Output detailed logging information.",
         action="store_true",
     )
-    return vars(parser.parse_args())
+    return vars(parser.parse_args(args=args))
 
 
-def main() -> None:
+def main(raw_args: Optional[list[str]] = None) -> None:
     language_mappings = get_language_mappings()
 
-    args = parse(description=__doc__, lang_choices=language_mappings.keys())
+    args = parse(
+        args=raw_args, description=__doc__, lang_choices=language_mappings.keys()
+    )
 
     if args["debug"]:
         # Leave at default if no logging/debugging requested.
