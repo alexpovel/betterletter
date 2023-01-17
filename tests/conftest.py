@@ -29,5 +29,5 @@ def pytest_make_parametrize_id(config, val, argname):
         # See if object has __str__ implemented
         try:
             return str(val)
-        except:
+        except Exception:  # https://stackoverflow.com/q/38974889/11477374
             pass
