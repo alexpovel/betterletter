@@ -1,6 +1,6 @@
 # https://www.gnu.org/software/make/manual/html_node/Special-Targets.html#Special-Targets
 # A phony target: not a file, just some routine.
-.PHONY: venv tests checks formatting profile help
+.PHONY: venv tests checks formatting profile help lint
 
 .DEFAULT_GOAL := help
 
@@ -58,8 +58,8 @@ hooks:
 formatcheck:
 	${RUN} black --check --diff ${LIBRARY}
 
-isortcheck:
-	${RUN} isort . --check --diff
+lint:
+	${RUN} ruff .
 
 typecheck:  ## Run type checks.
 	@echo "Running type checks."

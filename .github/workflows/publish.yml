@@ -51,17 +51,18 @@ jobs:
         run: |
           poetry env use ${{ matrix.python-version }}
           poetry install
-      - name: Run tests
-        run: make tests
 
-      - name: Run type checks
-        run: make typecheck
+      - name: Run linting
+        run: make lint
 
       - name: Check code formatting
         run: make formatcheck
 
-      - name: Check imports formatting
-        run: make isortcheck
+      - name: Run type checks
+        run: make typecheck
+
+      - name: Run tests
+        run: make tests
 
   release-please:
     name: Execute release chores
