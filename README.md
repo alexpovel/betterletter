@@ -4,96 +4,6 @@ In a given text, replaces alternative spellings of native characters with their 
 
 ![demo](docs/images/demo.gif)
 
-## Background
-
-For example, German native characters and their corresponding alternative spellings (e.g. when no proper keyboard layout is at hand, or ASCII is used) are:
-
-| Native Character | Alternative Spelling |
-| :--------------: | :------------------: |
-|       Ä/ä        |        Ae/ae         |
-|       Ö/ö        |        Oe/oe         |
-|       Ü/ü        |        Ue/ue         |
-|       ẞ/ß        |        SS/ss         |
-
-These pairings are recorded [here](https://github.com/alexpovel/betterletter/blob/master/betterletter/resources/languages.json).
-
-Going from left to right is simple: replace all native characters with their alternative spellings, minding case.
-That use case is also supported by this tool (`reverse` flag).
-
-The other direction is much less straightforward: there exist countless words for which alternative spellings occur somewhere as a pattern, yet replacing them with the corresponding native character would be wrong:
-
-| Character | Correct Spelling  | Wrong Spelling |
-| --------- | ----------------- | -------------- |
-| *Ä*       | **Ae**rodynamik   | Ärodynamik     |
-| *Ä*       | Isr**ae**l        | Isräl          |
-| *Ä*       | Schuf**ae**intrag | Schufäintrag   |
-| *Ö*       | K**oe**ffizient   | Köffizient     |
-| *Ö*       | Domin**oe**ffekt  | Dominöffekt    |
-| *Ö*       | P**oet**          | Pöt            |
-| *Ü*       | Abente**ue**r     | Abenteür       |
-| *Ü*       | Ma**ue**r         | Maür           |
-| *Ü*       | Ste**ue**rung     | Steürung       |
-| *ß*       | Me**ss**gerät     | Meßgerät       |
-| *ß*       | Me**ss**e         | Meße           |
-| *ß*       | Abschlu**ss**     | Abschluß       |
-
-just to name a few, pretty common examples.
-
-As such, this tool is based on a dictionary lookup, see also the [containing directory](https://github.com/alexpovel/betterletter/blob/master/betterletter/resources/dicts/).
-
-## Examples
-
-See also the [tests](https://github.com/alexpovel/betterletter/blob/master/tests/).
-
-### de
-
-The input:
-
-> Ueberhaupt braeuchte es mal einen Teststring.
-> Saetze ohne Bedeutung, aber mit vielen Umlauten.
-> DRPFA-Angehoerige gehoeren haeufig nicht dazu.
-> Bindestrich-Woerter spraechen Baende ueber Fehler.
-> Doppelgaenger-Doppelgaenger sind doppelt droelfzig.
-> Oder Uemlaeuten? Auslaeuten? Leute gaebe es, wuerde man meinen.
-> Ueble Nachrede ist naechtens nicht erlaubt.
-> Erlaube man dieses, waere es schoen uebertrieben.
-> Busse muesste geloest werden, bevor Gruesse zum Gruss kommen.
-> Busse sind Geraete, die womoeglich schnell fuehren.
-> Voegel sind aehnlich zu Oel.
-> Hierfuer ist fuer den droegen Poebel zu beachten, dass Anmassungen zu Gehoerverlust fuehren koennen.
-> Stroemelschnoesseldaemel!
-
-is turned into:
-
-> Überhaupt bräuchte es mal einen Teststring.
-> Sätze ohne Bedeutung, aber mit vielen Umlauten.
-> DRPFA-Angehörige gehören häufig nicht dazu.
-> Bindestrich-Wörter sprächen Bände über Fehler.
-> Doppelgänger-Doppelgänger sind doppelt droelfzig.
-> Oder Uemlaeuten? Auslaeuten? Leute gäbe es, würde man meinen.
-> Üble Nachrede ist nächtens nicht erlaubt.
-> Erlaube man dieses, wäre es schön übertrieben.
-> Buße müsste gelöst werden, bevor Grüße zum Gruß kommen.
-> Buße sind Geräte, die womöglich schnell führen.
-> Vögel sind ähnlich zu Öl.
-> Hierfür ist für den drögen Pöbel zu beachten, dass Anmaßungen zu Gehörverlust führen können.
-> Stroemelschnoesseldaemel!
-
----
-
-Note that some corrections are out of scope for this little script, e.g.:
-
-> Busse
-
-In German, *Busse* and *Buße* are two words of vastly different meaning (*busses* and *penance*, respectively).
-Unfortunately, they map to the same alternative spelling of *Busse*.
-The tool sees *Busse* (meaning *just that*, with no intent of changing it), notices *Buße* is a legal substitution, and therefore makes it.
-The tool has no awareness of context.
-
-Turning substitutions like these off would mean the tool would no longer emit *Buße*, ever.
-This could be as undesirable as the current behaviour.
-There seems to be no easy resolve.
-
 ## Installation
 
 ```shell
@@ -179,6 +89,96 @@ Sehr geehrte Frau Hübenstetter, ...
 # Paste the processed version from your clipboard.
 $ betterletter --clipboard de
 ```
+
+## Background
+
+For example, German native characters and their corresponding alternative spellings (e.g. when no proper keyboard layout is at hand, or ASCII is used) are:
+
+| Native Character | Alternative Spelling |
+| :--------------: | :------------------: |
+|       Ä/ä        |        Ae/ae         |
+|       Ö/ö        |        Oe/oe         |
+|       Ü/ü        |        Ue/ue         |
+|       ẞ/ß        |        SS/ss         |
+
+These pairings are recorded [here](https://github.com/alexpovel/betterletter/blob/master/betterletter/resources/languages.json).
+
+Going from left to right is simple: replace all native characters with their alternative spellings, minding case.
+That use case is also supported by this tool (`reverse` flag).
+
+The other direction is much less straightforward: there exist countless words for which alternative spellings occur somewhere as a pattern, yet replacing them with the corresponding native character would be wrong:
+
+| Character | Correct Spelling  | Wrong Spelling |
+| --------- | ----------------- | -------------- |
+| *Ä*       | **Ae**rodynamik   | Ärodynamik     |
+| *Ä*       | Isr**ae**l        | Isräl          |
+| *Ä*       | Schuf**ae**intrag | Schufäintrag   |
+| *Ö*       | K**oe**ffizient   | Köffizient     |
+| *Ö*       | Domin**oe**ffekt  | Dominöffekt    |
+| *Ö*       | P**oet**          | Pöt            |
+| *Ü*       | Abente**ue**r     | Abenteür       |
+| *Ü*       | Ma**ue**r         | Maür           |
+| *Ü*       | Ste**ue**rung     | Steürung       |
+| *ß*       | Me**ss**gerät     | Meßgerät       |
+| *ß*       | Me**ss**e         | Meße           |
+| *ß*       | Abschlu**ss**     | Abschluß       |
+
+just to name a few, pretty common examples.
+
+As such, this tool is based on a dictionary lookup, see also the [containing directory](https://github.com/alexpovel/betterletter/blob/master/betterletter/resources/dicts/).
+
+## Long-form samples
+
+See also the [tests](https://github.com/alexpovel/betterletter/blob/master/tests/).
+
+### de
+
+The input:
+
+> Ueberhaupt braeuchte es mal einen Teststring.
+> Saetze ohne Bedeutung, aber mit vielen Umlauten.
+> DRPFA-Angehoerige gehoeren haeufig nicht dazu.
+> Bindestrich-Woerter spraechen Baende ueber Fehler.
+> Doppelgaenger-Doppelgaenger sind doppelt droelfzig.
+> Oder Uemlaeuten? Auslaeuten? Leute gaebe es, wuerde man meinen.
+> Ueble Nachrede ist naechtens nicht erlaubt.
+> Erlaube man dieses, waere es schoen uebertrieben.
+> Busse muesste geloest werden, bevor Gruesse zum Gruss kommen.
+> Busse sind Geraete, die womoeglich schnell fuehren.
+> Voegel sind aehnlich zu Oel.
+> Hierfuer ist fuer den droegen Poebel zu beachten, dass Anmassungen zu Gehoerverlust fuehren koennen.
+> Stroemelschnoesseldaemel!
+
+is turned into:
+
+> Überhaupt bräuchte es mal einen Teststring.
+> Sätze ohne Bedeutung, aber mit vielen Umlauten.
+> DRPFA-Angehörige gehören häufig nicht dazu.
+> Bindestrich-Wörter sprächen Bände über Fehler.
+> Doppelgänger-Doppelgänger sind doppelt droelfzig.
+> Oder Uemlaeuten? Auslaeuten? Leute gäbe es, würde man meinen.
+> Üble Nachrede ist nächtens nicht erlaubt.
+> Erlaube man dieses, wäre es schön übertrieben.
+> Buße müsste gelöst werden, bevor Grüße zum Gruß kommen.
+> Buße sind Geräte, die womöglich schnell führen.
+> Vögel sind ähnlich zu Öl.
+> Hierfür ist für den drögen Pöbel zu beachten, dass Anmaßungen zu Gehörverlust führen können.
+> Stroemelschnoesseldaemel!
+
+---
+
+Note that some corrections are out of scope for this little script, e.g.:
+
+> Busse
+
+In German, *Busse* and *Buße* are two words of vastly different meaning (*busses* and *penance*, respectively).
+Unfortunately, they map to the same alternative spelling of *Busse*.
+The tool sees *Busse* (meaning *just that*, with no intent of changing it), notices *Buße* is a legal substitution, and therefore makes it.
+The tool has no awareness of context.
+
+Turning substitutions like these off would mean the tool would no longer emit *Buße*, ever.
+This could be as undesirable as the current behaviour.
+There seems to be no easy resolve.
 
 ## Development
 
