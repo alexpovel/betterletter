@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.1](https://github.com/alexpovel/betterletter/compare/v1.1.0...v1.1.1) (2023-01-24)
+
+
+### Bug Fixes
+
+* Quoting issues on bash (history expansion triggered) ([f5565af](https://github.com/alexpovel/betterletter/commit/f5565afddef40e341b142a8db7f2873c44e97e03))
+
+
+### Documentation
+
+* Move installation and usage instructions to the top ([6dc9e00](https://github.com/alexpovel/betterletter/commit/6dc9e00aa957b978e7f9ae16a91ddf54b923024d))
+
 ## [1.1.0](https://github.com/alexpovel/betterletter/compare/v1.0.5...v1.1.0) (2023-01-11)
 
 
