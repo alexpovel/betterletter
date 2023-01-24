@@ -137,14 +137,14 @@ options:
 Normal usage:
 
 ```bash
-$ echo "Hoeflich fragen waere angebracht!" | betterletter de
+$ echo 'Hoeflich fragen waere angebracht!' | betterletter de
 Höflich fragen wäre angebracht!
 ```
 
 Reverse it:
 
 ```bash
-$ echo "Höflich fragen wäre angebracht!" | betterletter --reverse de
+$ echo 'Höflich fragen wäre angebracht!' | betterletter --reverse de
 Hoeflich fragen waere angebracht!
 ```
 
@@ -152,7 +152,7 @@ A diff view, useful for longer text and to confirm correctness.
 The [diff](https://docs.python.org/3/library/difflib.html) is written to STDERR so won't interfere with further redirection.
 
 ```bash
-$ echo "Hoeflich fragen waere angebracht!" | betterletter --diff de 2> diff.txt
+$ echo 'Hoeflich fragen waere angebracht!' | betterletter --diff de 2> diff.txt
 Höflich fragen wäre angebracht!
 $ cat diff.txt
 - Hoeflich fragen waere angebracht!
@@ -165,10 +165,10 @@ The tool may be coerced into working with names:
 
 ```bash
 $ # A name won't be in the dictionary:
-$ echo "Sehr geehrte Frau Huebenstetter, ..." | betterletter de
+$ echo 'Sehr geehrte Frau Huebenstetter, ...' | betterletter de
 Sehr geehrte Frau Huebenstetter, ...
 $ # But we can force it to work:
-$ echo "Sehr geehrte Frau Huebenstetter, ..." | betterletter --force de
+$ echo 'Sehr geehrte Frau Huebenstetter, ...' | betterletter --force de
 Sehr geehrte Frau Hübenstetter, ...
 ```
 
