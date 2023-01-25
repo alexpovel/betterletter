@@ -37,6 +37,7 @@ pytest = "^7.2.0"
 snakeviz = "^2.1.1"
 pytest-cov = "^4.0.0"
 ruff = "^0.0.224"
+pre-commit = "^3.0.0"
 
 [tool.mypy]
 exclude = "tests/*"

@@ -197,7 +197,7 @@ poetry run python -m betterletter -h
 
 Development tasks are all run through `poetry`, within the context of the virtual environment.
 
-Run `make` (without arguments) for more available commands related to development.
+Run [`just`](https://github.com/casey/just) (without arguments) for more available commands related to development.
 
 ## AutoHotKey
 

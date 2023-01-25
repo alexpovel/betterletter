@@ -8,7 +8,7 @@ repos:
       - id: lint
         name: Run linting
         language: system
-        entry: make lint
+        entry: just check-lint
         stages:
           - "commit"
           - "push"
@@ -20,7 +20,7 @@ repos:
       - id: check-formatting
         name: Check formatting
         language: system
-        entry: make formatcheck
+        entry: just check-format
         stages:
           - "commit"
           - "push"
@@ -30,9 +30,9 @@ repos:
   - repo: local
     hooks:
       - id: run-typecheck
-        name: Run typecheck
+        name: Run type checks
         language: system
-        entry: make typecheck
+        entry: just check-types
         stages:
           - "commit"
           - "push"
@@ -44,7 +44,7 @@ repos:
       - id: run-tests
         name: Run tests
         language: system
-        entry: make tests
+        entry: just test
         stages:
           - "commit"
           - "push"

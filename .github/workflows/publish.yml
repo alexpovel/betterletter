@@ -2,11 +2,6 @@ name: Build, test (and publish)
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   tests:
@@ -52,17 +47,22 @@ jobs:
           poetry env use ${{ matrix.python-version }}
           poetry install
 
+      - name: Set up 'just' command runner
+        uses: extractions/setup-just@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run linting
-        run: make lint
+        run: just check-lint
 
       - name: Check code formatting
-        run: make formatcheck
+        run: just check-format
 
       - name: Run type checks
-        run: make typecheck
+        run: just check-types
 
       - name: Run tests
-        run: make tests
+        run: just test
 
   release-please:
     name: Execute release chores
