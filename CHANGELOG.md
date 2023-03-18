@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/alexpovel/betterletter/compare/v1.1.1...v1.2.0) (2023-03-18)
+
+
+### Features
+
+* Add `--symbols` feature (replace ASCII symbols w/ Unicode) ([a9623a1](https://github.com/alexpovel/betterletter/commit/a9623a1c5c106b8bf9d6a74d295da38f161ad752))
+
 ## [1.1.1](https://github.com/alexpovel/betterletter/compare/v1.1.0...v1.1.1) (2023-01-24)
 
 
