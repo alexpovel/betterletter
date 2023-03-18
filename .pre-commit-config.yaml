@@ -9,6 +9,7 @@ repos:
         name: Run linting
         language: system
         entry: just check-lint
+        pass_filenames: false # `just` would try to run passed files as recipes
         stages:
           - "commit"
           - "push"
@@ -21,6 +22,7 @@ repos:
         name: Check formatting
         language: system
         entry: just check-format
+        pass_filenames: false # `just` would try to run passed files as recipes
         stages:
           - "commit"
           - "push"
@@ -33,6 +35,7 @@ repos:
         name: Run type checks
         language: system
         entry: just check-types
+        pass_filenames: false # `just` would try to run passed files as recipes
         stages:
           - "commit"
           - "push"
@@ -45,6 +48,7 @@ repos:
         name: Run tests
         language: system
         entry: just test
+        pass_filenames: false # `just` would try to run passed files as recipes
         stages:
           - "commit"
           - "push"
