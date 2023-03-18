@@ -78,6 +78,12 @@ def parse(
         " by their alternative spellings.",
         action="store_true",
     )
+    parser.add_argument(
+        "-s",
+        "--symbols",
+        help="Additionally, in a second pass, replace recognized ASCII symbols with their (best-effort) Unicode equivalents (e.g. '->' with '→').",
+        action="store_true",
+    )
 
     if _TKINTER_AVAILABLE:
         kwargs = {
@@ -152,6 +158,9 @@ def main(raw_args: Optional[list[str]] = None) -> None:
                 force=bool(args["force"]),
             )
         )
+
+    if args["symbols"]:
+        out_text = substituters.symbols(out_text)
 
     if args["diff"] or args["gui"]:
         from difflib import Differ

@@ -197,3 +197,42 @@ def backward(
     # `str.translate` requires 'ordinals: string' mappings, not just 'string: string'
     trans = str.maketrans(table)
     return text.translate(trans)
+
+
+def symbols(text: str) -> str:
+    """Replaces 'ASCII symbols' with Unicode equivalents (e.g., '->' becomes '→')."""
+
+    # Hard-code the table because why not. It's simple and small. Saves some I/O and
+    # makes testing easier.
+    substitutions = {
+        # Arrows
+        "->": "→",
+        "<-": "←",
+        "<->": "↔",
+        "=>": "⇒",
+        "<=>": "⇔",
+        "-->": "⟶",
+        "<--": "⟵",
+        # Typographic
+        "--": "–",
+        "---": "—",
+        # Math
+        "!=": "≠",
+        "<=": "≤",
+        ">=": "≥",
+        # Currency
+        "EUR": "€",
+        "USD": "$",
+        "GBP": "£",
+        "JPY": "¥",
+        # Misc
+        "degC": "°C",  # Full Unicode symbol exists, but many fonts don't have it
+        "degF": "°F",  # Full Unicode symbol exists, but many fonts don't have it
+    }
+
+    pattern = re.compile(
+        # Sort by length, longest first, to avoid e.g. '-->' turning into '-→'.
+        f"({'|'.join(sorted(substitutions.keys(), key=len, reverse=True))})"
+    )
+
+    return re.sub(pattern, lambda match: substitutions[match.group(0)], text)

@@ -3,7 +3,7 @@ from contextlib import nullcontext
 import pytest
 
 from betterletter.io import get_dictionary, get_language_mappings
-from betterletter.substituters import _substitute_spans, backward, forward
+from betterletter.substituters import _substitute_spans, backward, forward, symbols
 
 
 @pytest.mark.parametrize(
@@ -83,6 +83,71 @@ from betterletter.substituters import _substitute_spans, backward, forward
 def test_substitute_spans(string, substitutions, result, expectation):
     with expectation:
         assert _substitute_spans(string, substitutions) == result
+
+
+@pytest.mark.parametrize(
+    ["input", "result"],
+    [
+        ("->", "→"),
+        ("->>", "→>"),
+        ("-X>", "-X>"),
+        ("-> A", "→ A"),
+        ("B <-", "B ←"),
+        ("<->", "↔"),
+        (" <-> ", " ↔ "),
+        ("A <-> B", "A ↔ B"),
+        ("=>", "⇒"),
+        ("=>A", "⇒A"),
+        ("=> B", "⇒ B"),
+        ("A => B", "A ⇒ B"),
+        ("<=>", "⇔"),
+        ("A<=>B", "A⇔B"),
+        ("A <=> B", "A ⇔ B"),
+        ("-->", "⟶"),
+        ("-->B", "⟶B"),
+        ("--> B", "⟶ B"),
+        ("A --> B", "A ⟶ B"),
+        ("A-->B", "A⟶B"),
+        ("<--", "⟵"),
+        ("A <--", "A ⟵"),
+        ("--", "–"),
+        ("A--B", "A–B"),
+        ("A -- B", "A – B"),
+        ("---", "—"),
+        ("A---B", "A—B"),
+        ("A --- B", "A — B"),
+        ("!=", "≠"),
+        ("A!=B", "A≠B"),
+        ("A != B", "A ≠ B"),
+        ("<=", "≤"),
+        ("A<=B", "A≤B"),
+        ("A <= B", "A ≤ B"),
+        ("EUR", "€"),
+        ("1EUR", "1€"),
+        ("1 EUR", "1 €"),
+        ("degC", "°C"),
+        ("3degC", "3°C"),
+        ("3 degC", "3 °C"),
+        (
+            "=> This -> is a test. <- That sentence--including this one--should pass.",
+            "⇒ This → is a test. ← That sentence–including this one–should pass.",
+        ),
+        (
+            "As should---barring any errors---this one.",
+            "As should—barring any errors—this one.",
+        ),
+        (
+            "If A->B and A-->B then maybe A != B or A <= B.",
+            "If A→B and A⟶B then maybe A ≠ B or A ≤ B.",
+        ),
+        (
+            "1EUR, 3degC, and 3 degC should also pass <--!",
+            "1€, 3°C, and 3 °C should also pass ⟵!",
+        ),
+    ],
+)
+def test_symbols(input, result) -> None:
+    assert symbols(input) == result
 
 
 @pytest.fixture(scope="module")  # https://stackoverflow.com/a/64693486/11477374
