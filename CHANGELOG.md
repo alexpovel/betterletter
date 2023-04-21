@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/alexpovel/betterletter/compare/v1.2.0...v1.2.1) (2023-04-21)
+
+
+### Bug Fixes
+
+* Harden PyPI deployment via OIDC ([d8b69d8](https://github.com/alexpovel/betterletter/commit/d8b69d8ecae25b2e9b78246344111be8675b963e))
+
 ## [1.2.0](https://github.com/alexpovel/betterletter/compare/v1.1.1...v1.2.0) (2023-03-18)
 
 
