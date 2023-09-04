@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Installing via `pipx` is 'fully supported', so no need for
       # https://github.com/snok/install-poetry, which is a bit slower. See also
@@ -94,7 +94,7 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Poetry
         run: pipx install poetry
