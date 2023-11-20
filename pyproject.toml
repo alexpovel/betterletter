@@ -36,7 +36,7 @@ mypy = ">=0.991,<1.6"
 pytest = "^7.2.0"
 snakeviz = "^2.1.1"
 pytest-cov = "^4.0.0"
-ruff = ">=0.0.224,<0.0.292"
+ruff = ">=0.0.224,<0.1.7"
 pre-commit = "^3.0.0"
 
 [tool.mypy]
