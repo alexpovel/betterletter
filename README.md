@@ -1,5 +1,19 @@
 # betterletter
 
+> [!IMPORTANT]
+>
+> This project is "complete" and will no longer receive feature updates (bug fixes are
+> still possible, feel free to report!).
+>
+> Instead, use [`srgn` with its `german`
+> option](https://github.com/alexpovel/srgn/tree/cda850d59375a2b0b89c52f88a025a7eea839411#german),
+> which is better in every way:
+>
+> - much faster (written in Rust),
+> - easier to install (single binary),
+> - supports arbitrary compound words,
+> - tons of other features (which you could just ignore at no loss).
+
 In a given text, replaces alternative spellings of native characters with their proper spellings[^1]:
 
 ![demo](docs/images/demo.gif)
