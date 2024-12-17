@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/alexpovel/betterletter/compare/v1.2.1...v1.2.2) (2024-11-24)
+
+
+### Documentation
+
+* Add project maintenance notice ([9cab010](https://github.com/alexpovel/betterletter/commit/9cab01098b93637ce5a0913fd6cf3cd9e65c3e21))
+
 ## [1.2.1](https://github.com/alexpovel/betterletter/compare/v1.2.0...v1.2.1) (2023-04-21)
 
 
